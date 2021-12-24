@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    acrtive: local
+server:
+  port: 18081
+
+---
+
+spring:
+  profiles:
+    acrtive: dev
+server:
+  port: 8081
+
+---
+
+spring:
+  profiles:
+    acrtive: prod
+server:
+  port: 80

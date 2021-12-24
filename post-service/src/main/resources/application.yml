@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    acrtive: local
+
+---
+
+spring:
+  profiles:
+    acrtive: dev
+
+---
+
+spring:
+  profiles:
+    acrtive: prod
+

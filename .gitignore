@@ -2,3 +2,4 @@
 Help.md
 /build
 /node_modules
+/.gradle

@@ -1,16 +1,16 @@
 spring:
   profiles:
-    acrtive: local
+    active: local
 
 ---
 
 spring:
   profiles:
-    acrtive: dev
+    active: dev
 
 ---
 
 spring:
   profiles:
-    acrtive: prod
+    active: prod
 

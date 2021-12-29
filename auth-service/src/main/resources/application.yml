@@ -1,21 +1,18 @@
 spring:
   profiles:
-    acrtive: local
-server:
-  port: 18081
+    active: local
+
 
 ---
 
 spring:
   profiles:
-    acrtive: dev
-server:
-  port: 8081
+    active: dev
+
 
 ---
 
 spring:
   profiles:
-    acrtive: prod
-server:
-  port: 80
+    active: prod
+

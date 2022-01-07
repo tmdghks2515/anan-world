@@ -31,5 +31,37 @@ spring:
             - RemoveRequestHeader= Cookie,Set-Cookie
             - RewritePath=/api/post/(?<path>.*), /$\{path}
 
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins:
+              - "http://localhost:3001"
+            allowed-methods:
+              - "*"
+            allowed-headers:
+              - "*"
+            allow-credentials: true
+        add-to-simple-url-handler-mapping: true
+
+#        corsConfigurations:
+#          '[/**]':
+#            allowedOrigins:
+#
+#            allow-credentials: true
+#            allowedHeaders:
+#              - x-requested-with
+#              - authorization
+#              - content-type
+#              - credential
+#              - X-AUTH-TOKEN
+#              - X-CSRF-TOKEN
+#            allowedMethods:
+#              - POST
+#              - GET
+#              - PUT
+#              - OPTIONS
+#              - DELETE
+
 jwt:
   secret: BvPHGM8C0ia4uOuxxqPD5DTbWC9F9TWvPStp3pb7ARo0oK2mJ3pd3YG4lxA9i8bj6OTbadwezxgeEByY
+

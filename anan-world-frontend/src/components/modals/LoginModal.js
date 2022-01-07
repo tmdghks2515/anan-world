@@ -34,12 +34,18 @@ const LoginModal = (props) => {
         }
     }
 
-    const handleLogin = () => {
-
+    const handleLogin = async (user) => {
+        const res = await userAPI.login(user)
+        if (_.isEqual(res.status, 200)) {
+            message.success('로그인 성공');
+            setSignUpMode(false);
+        } else {
+            message.error(_.get(res, 'data.message'))
+        }
     }
 
     const onFinishFailed = (values) => {
-
+        console.log('!@#!@#!@#')
     }
 
     const validateMessages = {
@@ -75,18 +81,14 @@ const LoginModal = (props) => {
                         >
                             <Form.Item name={'username'}
                                 rules={[
-                                    {
-                                        required: true,
-                                    }
+                                    {required: true,}
                                 ]}
                             >
                                 <Input placeholder={"아이디"}/>
                             </Form.Item>
                             <Form.Item name={'password'}
                                    rules={[
-                                       {
-                                           required: true,
-                                       },
+                                       {required: true,},
                                        ({}) => ({
                                            validator(_, value) {
                                                const check = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{10,}$/;
@@ -122,9 +124,7 @@ const LoginModal = (props) => {
                             </Form.Item>
                             <Form.Item name={'name'}
                                    rules={[
-                                       {
-                                           required: true,
-                                       }
+                                       {required: true,}
                                    ]}
                             >
                                 <Input placeholder={"이름"}/>
@@ -139,13 +139,7 @@ const LoginModal = (props) => {
                             >
                                 <Input placeholder={"이메일"}/>
                             </Form.Item>
-                            <CustomButton
-                                width={'100%'}
-                                type="primary"
-                                htmlType="submit"
-                            >
-                                가입
-                            </CustomButton>
+                            <CustomButton width={'100%'} type="primary" htmlType="submit">가입</CustomButton>
                         </Form> :
                         <Form
                             onFinish={handleLogin}
@@ -153,23 +147,19 @@ const LoginModal = (props) => {
                         >
                             <Form.Item name={'username'}
                                    rules={[
-                                       {
-                                           required: true,
-                                       }
+                                       {required: true,}
                                    ]}
                             >
                                 <Input placeholder={"아이디"}/>
                             </Form.Item>
                             <Form.Item name={'password'}
                                    rules={[
-                                       {
-                                           required: true,
-                                       }
+                                       {required: true,}
                                    ]}
                             >
                                 <Input type={"password"} placeholder={"비밀번호"}/>
                             </Form.Item>
-                            <CustomButton type={'primary'} width={'100%'}>로그인</CustomButton>
+                            <CustomButton type={'primary'} width={'100%'} htmlType="submit">로그인</CustomButton>
                         </Form>
                 }
             </CustomModal>

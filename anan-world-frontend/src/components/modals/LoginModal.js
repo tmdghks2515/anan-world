@@ -27,10 +27,11 @@ const LoginModal = (props) => {
     const handleRegister = async (data) => {
         const res = await userAPI.register(data)
         if (_.isEqual(res.status, 200)) {
-            message.success('회원가입 성공')
-            setSignUpMode(false)
+            message.success('회원가입 성공');
+            setSignUpMode(false);
+        } else {
+            message.error(_.get(res, 'data.message'))
         }
-        console.log('res', res);
     }
 
     const handleLogin = () => {

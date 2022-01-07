@@ -1,12 +1,14 @@
 package io.ananworld.authservice.domain.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Set;
 
+@Builder
 @Entity
 @Table(name = "roles")
 @Data

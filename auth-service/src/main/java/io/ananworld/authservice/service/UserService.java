@@ -1,11 +1,11 @@
 package io.ananworld.authservice.service;
 
+import io.ananworld.authservice.domain.dto.UserDto;
 import io.ananworld.authservice.domain.entity.Role;
 import io.ananworld.authservice.domain.entity.User;
 import io.ananworld.authservice.repository.RoleRepository;
 import io.ananworld.authservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +22,27 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
 
-    public User createNewUser(User user) {
+    public void init() {
+        Role role = Role.builder()
+                .roleName("USER")
+                .roleDescription("일반유저")
+                .build();
+
+        roleRepository.save(role);
+    }
+
+    public User createNewUser(UserDto dto) {
+        User user = dto.toEntity();
+
         Role role = roleRepository.findById("USER").get();
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-        user.setRoles(roles);
-        user.setPassword(getEncodedPassword(user.getPassword()));
+
+        user.init(roles, getEncodedPassword(dto.getPassword()));
+
         return userRepository.save(user);
     }
+
 
     private String getEncodedPassword(String password) {
         return passwordEncoder.encode(password);

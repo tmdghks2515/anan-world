@@ -1,15 +1,19 @@
 package io.ananworld.authservice.domain.entity;
 
+import io.ananworld.authservice.domain.dto.UserDto;
+import io.ananworld.authservice.repository.RoleRepository;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
+@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Setter
 @Entity
 public class User {
 
@@ -33,4 +37,11 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
+
+
+    public void init(Set<Role> roles, String password) {
+      this.roles = roles;
+      this.password = password;
+    }
+
 }

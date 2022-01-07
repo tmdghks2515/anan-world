@@ -16,10 +16,20 @@ public class UserDto {
     private String username;
     private String password;
     private String name;
+    private String email;
 
     public UserDto(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.name = user.getName();
+    }
+
+    public User toEntity() {
+        return User.builder()
+                .username(email)
+                .name(name)
+                .password(password)
+                .email(email)
+                .build();
     }
 }

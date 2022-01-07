@@ -3,6 +3,7 @@ package io.ananworld.authservice.service;
 import io.ananworld.authservice.domain.dto.UserDto;
 import io.ananworld.authservice.domain.entity.Role;
 import io.ananworld.authservice.domain.entity.User;
+import io.ananworld.authservice.exceptions.ApiException;
 import io.ananworld.authservice.repository.RoleRepository;
 import io.ananworld.authservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +32,21 @@ public class UserService {
         roleRepository.save(role);
     }
 
-    public User createNewUser(UserDto dto) {
+    public User createNewUser(UserDto dto) throws ApiException{
+
+        if (userRepository.findByUsername(dto.getUsername()).isPresent()) {
+            throw new ApiException("400", "사용중인 아이디 입니다.");
+        } else if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new ApiException("400", "사용중인 이메일 입니다.");
+        }
+
         User user = dto.toEntity();
 
         Role role = roleRepository.findById("USER").get();
         Set<Role> roles = new HashSet<>();
         roles.add(role);
 
-        user.init(roles, getEncodedPassword(dto.getPassword()));
+        user.setRoleAndPW(roles, getEncodedPassword(dto.getPassword()));
 
         return userRepository.save(user);
     }

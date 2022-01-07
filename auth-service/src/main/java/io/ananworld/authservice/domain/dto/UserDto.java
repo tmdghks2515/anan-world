@@ -22,11 +22,12 @@ public class UserDto {
         this.id = user.getId();
         this.username = user.getUsername();
         this.name = user.getName();
+        this.email = user.getEmail();
     }
 
     public User toEntity() {
         return User.builder()
-                .username(email)
+                .username(username)
                 .name(name)
                 .password(password)
                 .email(email)

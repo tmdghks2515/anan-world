@@ -29,7 +29,7 @@ public class User extends BaseEntity{
     @Column(nullable = false, length = 60)
     private String name;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
@@ -39,7 +39,7 @@ public class User extends BaseEntity{
     private Set<Role> roles;
 
 
-    public void init(Set<Role> roles, String password) {
+    public void setRoleAndPW(Set<Role> roles, String password) {
       this.roles = roles;
       this.password = password;
     }

@@ -20,7 +20,7 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public AuthResponseDto login(AuthRequestDto request) throws Exception {
+    public AuthResponseDto login(@RequestBody AuthRequestDto request) throws Exception {
         return userDetailService.createJwtToken(request);
     }
 

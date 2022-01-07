@@ -4,20 +4,11 @@ import {CustomButton} from "../../static/styles/buttons";
 import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 import { open, close } from "../../slices/modals/loginModal"
+import LoginModal from "../modals/LoginModal";
 
 const Header = (props) => {
 
     const dispatch = useDispatch()
-
-    const loginModalVisible = useSelector((state) => state.loginModalVisible.value)
-
-    const handleCancel = () => {
-        dispatch(close())
-    }
-
-    const handleOK = () => {
-        dispatch(close())
-    }
 
     return (
         <>
@@ -32,13 +23,7 @@ const Header = (props) => {
             </StyledHeader>
 
             {/** 로그인 모달 */}
-            <Modal
-                title="로그인"
-                visible={ loginModalVisible }
-                onOk={ handleOK }
-                onCancel={ handleCancel }
-            >
-            </Modal>
+            <LoginModal/>
         </>
     )
 }

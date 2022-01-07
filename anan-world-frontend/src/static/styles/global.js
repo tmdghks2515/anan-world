@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const GlobalTheme = styled.div`
+export const GlobalStyle = styled.div`
     font-family: "NotoSansKR";
     
 `

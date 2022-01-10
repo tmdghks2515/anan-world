@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -41,11 +42,9 @@ public class UserService {
         }
 
         User user = dto.toEntity();
-
         Role role = roleRepository.findById("USER").get();
         Set<Role> roles = new HashSet<>();
         roles.add(role);
-
         user.setRoleAndPW(roles, getEncodedPassword(dto.getPassword()));
 
         return userRepository.save(user);
@@ -54,5 +53,9 @@ public class UserService {
 
     private String getEncodedPassword(String password) {
         return passwordEncoder.encode(password);
+    }
+
+    public List<UserDto> list() {
+        return userRepository.list();
     }
 }

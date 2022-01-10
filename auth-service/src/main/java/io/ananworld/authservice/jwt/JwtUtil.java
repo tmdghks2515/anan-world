@@ -56,7 +56,7 @@ public class JwtUtil {
         if ("ACCESS".equals(type)) {
             expirationTimeLong = Long.parseLong(expirationTime) * 1000;
         } else {
-            expirationTimeLong = Long.parseLong(expirationTime) * 1000 * 5;
+            expirationTimeLong = Long.parseLong(expirationTime) * 1000 * 24 * 7;
         }
         final Date createdDate = new Date();
         final Date expirationDate = new Date(createdDate.getTime() + expirationTimeLong);

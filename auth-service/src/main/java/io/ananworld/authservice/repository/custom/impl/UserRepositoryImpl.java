@@ -35,8 +35,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                         user.id,
                         user.username,
                         user.name,
-                        user.email,
-                        user.roles
+                        user.email
                 )
         )
                 .from(user)

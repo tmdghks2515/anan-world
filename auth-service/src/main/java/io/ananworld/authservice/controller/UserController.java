@@ -16,7 +16,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/user/list")
+    @GetMapping("/list")
     public List<UserDto> list() {
         return userService.list();
     }

@@ -54,9 +54,9 @@ public class JwtUtil {
     private String doGenerateToken(Map<String, Object> claims, String username, String type) {
         long expirationTimeLong;
         if ("ACCESS".equals(type)) {
-            expirationTimeLong = Long.parseLong(expirationTime) * 1000;
+            expirationTimeLong = Long.parseLong(expirationTime) * 1000; // 토큰 유효시간 1일
         } else {
-            expirationTimeLong = Long.parseLong(expirationTime) * 1000 * 24 * 7;
+            expirationTimeLong = Long.parseLong(expirationTime) * 1000 * 30; // 리프레시 토큰 유효기간 30일
         }
         final Date createdDate = new Date();
         final Date expirationDate = new Date(createdDate.getTime() + expirationTimeLong);

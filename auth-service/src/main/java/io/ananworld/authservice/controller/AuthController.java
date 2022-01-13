@@ -13,6 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
@@ -20,14 +24,19 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public AuthResponseDto login(@RequestBody AuthRequestDto request) throws Exception {
-        return userDetailService.createJwtToken(request);
+    public AuthResponseDto login(@RequestBody AuthRequestDto request, HttpServletRequest req, HttpServletResponse res) throws Exception {
+        return userDetailService.createJwtToken(request, req, res);
     }
 
     @PostMapping("/register")
     public ResponseEntity<Void> registerNewUser(@RequestBody UserDto userDto) throws ApiException {
         userService.createNewUser(userDto);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/refreshJwt")
+    public AuthResponseDto refreshJwt(HttpServletRequest req, HttpServletResponse res) throws Exception {
+        return userDetailService.refreshJwtToken(req, res);
     }
 }
 

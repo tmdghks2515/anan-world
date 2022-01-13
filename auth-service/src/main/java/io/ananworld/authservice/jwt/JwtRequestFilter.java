@@ -2,6 +2,9 @@ package io.ananworld.authservice.jwt;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +24,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final JwtUserDetailService userDetailService;
+    private final Logger log = LoggerFactory.getLogger(JwtRequestFilter.class);
 
     public JwtRequestFilter(JwtUserDetailService userDetailService, JwtUtil jwtUtil) {
         this.userDetailService = userDetailService;
@@ -28,8 +32,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
-        final String header = httpServletRequest.getHeader("Authorization");
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
+        final String header = req.getHeader("Authorization");
         String jwtToken = null;
         String userName = null;
         if (header != null && header.startsWith("Bearer ")) {
@@ -37,12 +41,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             try {
                 userName = jwtUtil.getUserNameFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
-                System.out.println("Unable to get JWT token");
+                log.debug("Unable to get JWT token");
             } catch (ExpiredJwtException e) {
-                System.out.println("Jwt token is expired");
+                // token 의 유효기간이 지난경우
+                log.debug("JWT token expired");
             }
         } else {
-            System.out.println("Jwt token does not start with Bearer");
+            log.debug("Jwt token does not start with Bearer");
         }
 
         if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -50,11 +55,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             if (jwtUtil.validateToken(jwtToken, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
+        filterChain.doFilter(req, res);
     }
 
 }

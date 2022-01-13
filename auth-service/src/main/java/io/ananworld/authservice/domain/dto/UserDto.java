@@ -6,9 +6,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class UserDto {
 
@@ -17,20 +20,9 @@ public class UserDto {
     private String password;
     private String name;
     private String email;
+    private Set<RoleDto> roles;
 
-    public UserDto(User user) {
-        this.id = user.getId();
-        this.username = user.getUsername();
-        this.name = user.getName();
-        this.email = user.getEmail();
-    }
-
-    public User toEntity() {
-        return User.builder()
-                .username(username)
-                .name(name)
-                .password(password)
-                .email(email)
-                .build();
+    public UserDto() {
+        roles = Collections.emptySet();
     }
 }

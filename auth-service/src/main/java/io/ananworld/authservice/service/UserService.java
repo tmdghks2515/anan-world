@@ -1,5 +1,6 @@
 package io.ananworld.authservice.service;
 
+import io.ananworld.authservice.domain.dto.RoleDto;
 import io.ananworld.authservice.domain.dto.UserDto;
 import io.ananworld.authservice.domain.entity.Role;
 import io.ananworld.authservice.domain.entity.User;
@@ -25,10 +26,12 @@ public class UserService {
     private final RoleRepository roleRepository;
 
     public void init() {
-        Role role = Role.builder()
+        RoleDto roleDto = RoleDto.builder()
                 .roleName("USER")
-                .roleDescription("일반유저")
+                .roleDescription("일반 유저")
                 .build();
+
+        Role role = new Role(roleDto);
 
         roleRepository.save(role);
     }
@@ -41,7 +44,7 @@ public class UserService {
             throw new ApiException("400", "사용중인 이메일 입니다.");
         }
 
-        User user = dto.toEntity();
+        User user = new User(dto);
         Role role = roleRepository.findById("USER").get();
         Set<Role> roles = new HashSet<>();
         roles.add(role);

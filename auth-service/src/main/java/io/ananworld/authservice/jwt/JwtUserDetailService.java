@@ -2,6 +2,7 @@ package io.ananworld.authservice.jwt;
 
 import io.ananworld.authservice.domain.dto.AuthRequestDto;
 import io.ananworld.authservice.domain.dto.AuthResponseDto;
+import io.ananworld.authservice.domain.dto.UserDto;
 import io.ananworld.authservice.domain.entity.User;
 import io.ananworld.authservice.exceptions.ApiException;
 import io.ananworld.authservice.repository.UserRepository;
@@ -21,10 +22,13 @@ import org.springframework.web.util.WebUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Component
+@Transactional
 public class JwtUserDetailService implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -47,7 +51,15 @@ public class JwtUserDetailService implements UserDetailsService {
         String accessToken = jwtUtil.generate(userDetails, "ACCESS");
         String refreshToken = jwtUtil.generate(userDetails, "REFRESH");
         CookieUtils.create(res, "refreshToken", refreshToken, true, false, 2592000, "localhost"); // maxAge 30일
-        return new AuthResponseDto(accessToken);
+
+         // user 상세정보 조회 -> AuthResponseDto 에 담기
+        User user = userRepository.findByUsername(userName).get();
+        UserDto dto = UserDto.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .roles(user.getRoles())
+                .build();
+        return new AuthResponseDto(accessToken, dto);
     }
 
     public AuthResponseDto refreshJwtToken(HttpServletRequest req, HttpServletResponse res) throws Exception {
@@ -62,7 +74,7 @@ public class JwtUserDetailService implements UserDetailsService {
         String accessToken = jwtUtil.generate(userDetails, "ACCESS");
         String refreshTokenNew = jwtUtil.generate(userDetails, "REFRESH");
         CookieUtils.create(res, "refreshToken", refreshTokenNew, true, false, 2592000, "localhost"); // maxAge 30일
-        return new AuthResponseDto(accessToken);
+        return new AuthResponseDto(accessToken, null);
     }
 
     @Override

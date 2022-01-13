@@ -20,7 +20,7 @@ spring:
           predicates:
             - Path=/api/user/**
           filters:
-            - RemoveRequestHeader= Cookie,Set-Cookie
+            - RemoveRequestHeader= Set-Cookie
             - RewritePath=/api/user/(?<path>.*), /$\{path}
 
         - id: post-service
@@ -28,20 +28,32 @@ spring:
           predicates:
             - Path=/api/post/**
           filters:
-            - RemoveRequestHeader= Cookie,Set-Cookie
+            - RemoveRequestHeader= Set-Cookie
             - RewritePath=/api/post/(?<path>.*), /$\{path}
 
       globalcors:
         cors-configurations:
           '[/**]':
             allowed-origins:
-              - "http://localhost:3001"
+              - http://localhost:3001
             allowed-methods:
-              - "*"
+              - POST
+              - GET
+              - PUT
+              - OPTIONS
+              - DELETE
             allowed-headers:
-              - "*"
+              - Content-Type
+              - Cookie
+              - Access-Control-Allow-Headers
+              - Authorization
+              - X-Requested-With
+              - credential
+              - X-AUTH-TOKEN
+              - X-CSRF-TOKEN
             allow-credentials: true
-        add-to-simple-url-handler-mapping: true
+#        add-to-simple-url-handler-mapping: true
+
 
 #        corsConfigurations:
 #          '[/**]':

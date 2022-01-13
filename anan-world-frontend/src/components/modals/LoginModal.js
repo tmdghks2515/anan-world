@@ -6,6 +6,7 @@ import {CustomModal} from "../../static/styles/modals";
 import {CustomButton} from "../../static/styles/buttons";
 import userAPI from "../../api/userAPI";
 import _ from "lodash";
+import {login} from "../../slices/user";
 
 const LoginModal = (props) => {
 
@@ -36,7 +37,8 @@ const LoginModal = (props) => {
 
     const handleLogin = async (user) => {
         const res = await userAPI.login(user)
-        if (_.isEqual(res.status, 200)) {
+        if (_.isEqual(_.get(res, 'status'), 200)) {
+            dispatch(login({}))
             message.success('로그인 성공');
             setSignUpMode(false);
         } else {

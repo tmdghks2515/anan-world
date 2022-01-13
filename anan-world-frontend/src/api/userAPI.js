@@ -1,24 +1,47 @@
-import axios from "axios";
+import moment from "moment";
+import {api} from "../utils/axios";
+import jwtDecode from "jwt-decode";
 
 const register = (data) => {
-    return axios.post('http://localhost:18080/api/user/register', {...data})
+    return api.post('/user/register', {...data})
         .then(res => res)
         .catch(error => error.response)
 }
 
 const login = (user) => {
-    return axios.post('http://localhost:18080/api/user/login', {...user})
+    return api.post('/user/login', {...user})
         .then(res => {
             const { accessToken } = res.data
-            // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
-            axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
+
+            // accessToken 값 및 만료시간 을 localStorage 에 저장
+            const { exp } = jwtDecode(accessToken)
+            localStorage.setItem('accessToken', accessToken)
+            localStorage.setItem('expAt', exp * 1000)
+
             return res
         })
-        .catch(error => error.response)
+        .catch(error => error.response);
+}
+
+const refreshJwt = () => {
+    console.log(111111111111111)
+    return api.get('/user/refreshJwt')
+        .then(res => {
+            console.log(2222222222)
+            const { accessToken } = res.data
+
+            // accessToken 값 및 만료시간 을 localStorage 에 저장
+            const { exp } = jwtDecode(accessToken)
+            localStorage.setItem('accessToken', accessToken)
+            localStorage.setItem('expAt', exp * 1000)
+
+            return res
+        })
+        .catch(error => error.response);
 }
 
 const userAPI = {
-    register, login
+    register, login, refreshJwt
 }
 
 export default userAPI

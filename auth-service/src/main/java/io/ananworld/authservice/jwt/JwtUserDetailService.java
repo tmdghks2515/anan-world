@@ -52,14 +52,7 @@ public class JwtUserDetailService implements UserDetailsService {
         String refreshToken = jwtUtil.generate(userDetails, "REFRESH");
         CookieUtils.create(res, "refreshToken", refreshToken, true, false, 2592000, "localhost"); // maxAge 30일
 
-         // user 상세정보 조회 -> AuthResponseDto 에 담기
-        User user = userRepository.findByUsername(userName).get();
-        UserDto dto = UserDto.builder()
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .roles(user.getRoles())
-                .build();
-        return new AuthResponseDto(accessToken, dto);
+        return new AuthResponseDto(accessToken, createUserDto(userName));
     }
 
     public AuthResponseDto refreshJwtToken(HttpServletRequest req, HttpServletResponse res) throws Exception {
@@ -74,7 +67,7 @@ public class JwtUserDetailService implements UserDetailsService {
         String accessToken = jwtUtil.generate(userDetails, "ACCESS");
         String refreshTokenNew = jwtUtil.generate(userDetails, "REFRESH");
         CookieUtils.create(res, "refreshToken", refreshTokenNew, true, false, 2592000, "localhost"); // maxAge 30일
-        return new AuthResponseDto(accessToken, null);
+        return new AuthResponseDto(accessToken, createUserDto(username));
     }
 
     @Override
@@ -103,5 +96,15 @@ public class JwtUserDetailService implements UserDetailsService {
         } catch(BadCredentialsException e) {
             throw new Exception("Bad credentials from user");
         }
+    }
+
+    private UserDto createUserDto(String userName) {
+        User user = userRepository.findByUsername(userName).get();
+        return UserDto.builder()
+                .username(user.getUsername())
+                .name(user.getName())
+                .email(user.getEmail())
+                .roles(user.getRoles())
+                .build();
     }
 }

@@ -29,10 +29,8 @@ const refreshJwt = () => {
         .catch(error => error.response);
 }
 
-const logout = () => api.get('/user/logout')
-
 const userAPI = {
-    register, login, refreshJwt, logout
+    register, login, refreshJwt
 }
 
 export default userAPI

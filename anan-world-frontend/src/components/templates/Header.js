@@ -15,7 +15,6 @@ const Header = (props) => {
     const user = useSelector(state => _.get(state, 'user.value'))
 
     const handleLogout = () => {
-        userAPI.logout()
         dispatch(logout())
     }
 
@@ -33,9 +32,9 @@ const Header = (props) => {
         <>
             <StyledHeader>
                 <CustomButton radius="50px" marginx="10px">글 쓰기</CustomButton>
-                {user.signed ?
-                    <Dropdown overlay={menu} placement="bottomRight" arrow>
-                        <Button>{user.username}</Button>
+                {_.get(user, 'signed') ?
+                    <Dropdown overlay={menu} placement="bottomRight" arrow trigger={['click']}>
+                        <Button>{_.get(user, 'username')}</Button>
                     </Dropdown>
                     :
                     <CustomButton  radius="50px" onClick={() => dispatch(open()) }>로그인</CustomButton>

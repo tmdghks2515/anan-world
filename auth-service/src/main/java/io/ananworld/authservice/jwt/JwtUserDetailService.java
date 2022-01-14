@@ -7,11 +7,11 @@ import io.ananworld.authservice.domain.entity.User;
 import io.ananworld.authservice.exceptions.ApiException;
 import io.ananworld.authservice.repository.UserRepository;
 import io.ananworld.authservice.utils.CookieUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.*;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,14 +23,15 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 @Component
-@Transactional
 public class JwtUserDetailService implements UserDetailsService {
 
+    private final Logger log = LoggerFactory.getLogger(JwtUserDetailService.class);
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     private final AuthenticationManager authenticationManager;
@@ -43,7 +44,7 @@ public class JwtUserDetailService implements UserDetailsService {
         this.userDetailService = userDetailService;
     }
 
-    public AuthResponseDto createJwtToken(AuthRequestDto jwtRequest, HttpServletRequest req, HttpServletResponse res) throws Exception{
+    public AuthResponseDto createJwtToken(AuthRequestDto jwtRequest, HttpServletRequest req, HttpServletResponse res) throws Exception {
         String userName = jwtRequest.getUsername();
         String userPassword = jwtRequest.getPassword();
         authenticate(userName, userPassword);
@@ -63,7 +64,7 @@ public class JwtUserDetailService implements UserDetailsService {
         String username = jwtUtil.getUserNameFromToken(refreshToken);
         UserDetails userDetails = userDetailService.loadUserByUsername(username);
         if(!jwtUtil.validateToken(refreshToken, userDetails))
-            throw new ApiException("401", "refreshToken is invalid");
+            throw new ApiException(HttpStatus.UNAUTHORIZED, "refreshToken is invalid");
         String accessToken = jwtUtil.generate(userDetails, "ACCESS");
         String refreshTokenNew = jwtUtil.generate(userDetails, "REFRESH");
         CookieUtils.create(res, "refreshToken", refreshTokenNew, true, false, 2592000, "localhost"); // maxAge 30일
@@ -88,13 +89,15 @@ public class JwtUserDetailService implements UserDetailsService {
         return authorities;
     }
 
-    private void authenticate(String userName, String userPassword) throws Exception{
+    private void authenticate(String userName, String userPassword) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, userPassword));
         } catch (DisabledException e) {
-            throw new Exception("User is disabled");
-        } catch(BadCredentialsException e) {
-            throw new Exception("Bad credentials from user");
+            throw new DisabledException("User is disabled");
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Bad credentials from user");
+        } catch (Exception e) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "check the id and password");
         }
     }
 

@@ -24,8 +24,9 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public AuthResponseDto login(@RequestBody AuthRequestDto request, HttpServletRequest req, HttpServletResponse res) throws Exception {
-        return userDetailService.createJwtToken(request, req, res);
+    public ResponseEntity<AuthResponseDto> login(@RequestBody AuthRequestDto request, HttpServletRequest req, HttpServletResponse res) throws Exception {
+        AuthResponseDto dto = userDetailService.createJwtToken(request, req, res);
+        return new ResponseEntity<AuthResponseDto>(dto, HttpStatus.OK);
     }
 
     @PostMapping("/register")

@@ -19,9 +19,8 @@ public class GlobalExceptionHandler {
      @ExceptionHandler(ApiException.class)
       public ResponseEntity ApiExceptionHandler(ApiException exception) {
          Map<String, Object> body = new HashMap();
-         body.put("status", exception.getResultCode());
          body.put( "message", exception.getMessage());
-          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+          return ResponseEntity.status(exception.getStatus()).body(body);
       }
 }
 

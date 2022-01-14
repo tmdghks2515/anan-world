@@ -8,6 +8,7 @@ import io.ananworld.authservice.exceptions.ApiException;
 import io.ananworld.authservice.repository.RoleRepository;
 import io.ananworld.authservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,9 +40,9 @@ public class UserService {
     public User createNewUser(UserDto dto) throws ApiException{
 
         if (userRepository.findByUsername(dto.getUsername()).isPresent()) {
-            throw new ApiException("400", "사용중인 아이디 입니다.");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "사용중인 아이디 입니다.");
         } else if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
-            throw new ApiException("400", "사용중인 이메일 입니다.");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "사용중인 이메일 입니다.");
         }
 
         User user = new User(dto);

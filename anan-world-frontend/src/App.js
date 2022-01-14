@@ -7,10 +7,28 @@ import Header from "./components/templates/Header";
 import styled, {ThemeProvider} from "styled-components"
 import {GlobalStyle} from "./static/styles/global";
 import {CookiesProvider} from "react-cookie";
+import {useDispatch, useSelector} from "react-redux";
+import userAPI from "./api/userAPI";
+import _ from "lodash";
+import {login} from "./slices/user";
+import {useEffect} from "react";
 
 const App = () => {
 
+    const dispatch =  useDispatch()
     const theme = {}
+
+    const user = useSelector(state => state.user.value)
+
+    useEffect(() => {
+        if (!user.signed) {
+            autoSignIn()
+        }
+    }, [])
+
+    const autoSignIn = async () => {
+        const res = await userAPI.refreshJwt();
+    }
 
   return (
       <CookiesProvider>

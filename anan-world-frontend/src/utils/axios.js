@@ -42,7 +42,8 @@ api.interceptors.request.use(
 )
 
 
-api.interceptors.response.use(
+/**
+ api.interceptors.response.use(
     config => {
         return config
     },
@@ -57,4 +58,4 @@ api.interceptors.response.use(
         }
         // return Promise.reject(error)
     }
-)
+)*/

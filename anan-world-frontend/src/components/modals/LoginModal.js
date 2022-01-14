@@ -36,18 +36,17 @@ const LoginModal = (props) => {
     }
 
     const handleLogin = async (user) => {
-        const res = await userAPI.login(user)
-        if (_.isEqual(_.get(res, 'status'), 200)) {
-            dispatch(login({}))
+        const res = await dispatch(login(user))
+        if (_.get(res, 'payload.status') === 200) {
             message.success('로그인 성공');
-            setSignUpMode(false);
-        } else {
-            message.error(_.get(res, 'data.message'))
+            dispatch(close())
         }
+        else
+            message.error('등록되지 않은 아이디이거나 비밀번호가 일치하지 않아요')
     }
 
     const onFinishFailed = (values) => {
-        console.log('!@#!@#!@#')
+
     }
 
     const validateMessages = {
@@ -93,11 +92,11 @@ const LoginModal = (props) => {
                                        {required: true,},
                                        ({}) => ({
                                            validator(_, value) {
-                                               const check = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{10,}$/;
+                                               const check = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{5,}$/;
                                                if (!value || check.test(value)) {
                                                    return Promise.resolve();
                                                }
-                                               return Promise.reject(new Error('영문+숫자+특수문자 10자리 이상'));
+                                               return Promise.reject(new Error('영문+숫자+특수문자 5자리 이상'));
                                            },
                                        }),
                                    ]}

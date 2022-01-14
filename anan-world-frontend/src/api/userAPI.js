@@ -10,24 +10,13 @@ const register = (data) => {
 
 const login = (user) => {
     return api.post('/user/login', {...user})
-        .then(res => {
-            const { accessToken } = res.data
-
-            // accessToken 값 및 만료시간 을 localStorage 에 저장
-            const { exp } = jwtDecode(accessToken)
-            localStorage.setItem('accessToken', accessToken)
-            localStorage.setItem('expAt', exp * 1000)
-
-            return res
-        })
-        .catch(error => error.response);
+        .then(res => res)
+        .catch(error => error.response)
 }
 
 const refreshJwt = () => {
-    console.log(111111111111111)
     return api.get('/user/refreshJwt')
         .then(res => {
-            console.log(2222222222)
             const { accessToken } = res.data
 
             // accessToken 값 및 만료시간 을 localStorage 에 저장
@@ -40,8 +29,10 @@ const refreshJwt = () => {
         .catch(error => error.response);
 }
 
+const logout = () => api.get('/user/logout')
+
 const userAPI = {
-    register, login, refreshJwt
+    register, login, refreshJwt, logout
 }
 
 export default userAPI

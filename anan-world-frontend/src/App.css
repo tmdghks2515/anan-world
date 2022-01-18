@@ -41,3 +41,7 @@
   font-family: 'NotoSansKR';
   src: url("./static/fonts/NotoSansKR.otf");
 }
+@font-face {
+  font-family: 'FiraMono';
+  src: url("./static/fonts/FiraMono-Regular.ttf");
+}

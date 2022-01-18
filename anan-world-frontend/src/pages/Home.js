@@ -1,14 +1,27 @@
-import React from "react";
-import {Link} from "react-router-dom";
+import React, {useEffect} from "react";
 import Header from "../components/templates/Header";
+import {Card} from "antd";
+import Meta from "antd/lib/card/Meta";
+import postAPI from "../api/postAPI";
 
 const Home = () => {
+
+    useEffect(() => {
+        postAPI.list({})
+            .then(r => console.log('then r', r))
+            .catch(e => console.log('error e', e))
+    }, [])
+
     return (
         <>
             <Header/>
-            <h1>홈</h1>
-            <p>가장 먼저 보여지는 페이지입니다.</p>
-            <Link to="/about">소개</Link>
+            <Card
+                hoverable
+                style={{ width: 240 }}
+                cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
+            >
+                <Meta title="Europe Street beat" description="www.instagram.com" />
+            </Card>
         </>
     )
 }

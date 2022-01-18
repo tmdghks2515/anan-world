@@ -3,6 +3,7 @@ package io.ananworld.postservice.domain.post.service.impl;
 import com.querydsl.core.util.StringUtils;
 import io.ananworld.postservice.domain.post.repository.PostRepository;
 import io.ananworld.postservice.domain.post.repository.TagRepository;
+import io.ananworld.postservice.domain.post.repository.custom.PostRepositoryCustom;
 import io.ananworld.postservice.domain.post.service.PostService;
 import io.ananworld.postservice.global.domain.dto.PostDto;
 import io.ananworld.postservice.global.domain.dto.TagDto;
@@ -10,16 +11,15 @@ import io.ananworld.postservice.global.domain.entity.Post;
 import io.ananworld.postservice.global.domain.entity.Tag;
 import io.ananworld.postservice.global.exception.ApiException;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -30,6 +30,7 @@ public class PostServiceImpl implements PostService {
     private final Logger log = LoggerFactory.getLogger(PostServiceImpl.class);
     private final PostRepository postRepository;
     private final TagRepository tagRepository;
+    private final PostRepositoryCustom postRepositoryCustom;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -48,6 +49,11 @@ public class PostServiceImpl implements PostService {
         Post post = new Post(dto, tags);
 
         postRepository.save(post);
+    }
+
+    @Override
+    public List<PostDto> list() {
+        return postRepositoryCustom.list();
     }
 
     public Set<Tag> tagDtoSetToEntitySet(Set<TagDto> tagDtos) {

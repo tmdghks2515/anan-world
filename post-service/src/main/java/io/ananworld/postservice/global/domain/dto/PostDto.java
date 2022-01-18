@@ -17,4 +17,6 @@ public class PostDto {
     private String postContent;
     private Long writerId;
     private Set<TagDto> tags;
+    private String createdAt;
+    private String modifiedAt;
 }

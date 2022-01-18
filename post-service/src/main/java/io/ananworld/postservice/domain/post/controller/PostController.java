@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class PostController {
@@ -23,6 +25,12 @@ public class PostController {
     public ResponseEntity<Void> write(@RequestBody PostDto dto) throws ApiException {
         postService.save(dto);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<PostDto>> list() {
+        List<PostDto> list = postService.list();
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
 }

@@ -4,8 +4,7 @@ import postAPI from "../../api/postAPI";
 const initialState = {value: {postTitle: '', postContent: '', tags: [], writerId: '', created: '', modified: ''}}
 
 export const write = createAsyncThunk('post/write', async data => {
-    const res = await postAPI.write(data)
-    return res.data
+    return await postAPI.write(data)
 })
 
 export const postSlice = createSlice({
@@ -34,10 +33,10 @@ export const postSlice = createSlice({
     },
     extraReducers: {
         [write.fulfilled]: (state, { payload }) => {
-            console.log('fulfilled payload=', payload)
+            return payload
         },
         [write.rejected]: (state, { error }) => {
-            console.error(error.message)
+            return error
         },
     }
 })

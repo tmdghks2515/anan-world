@@ -9,6 +9,7 @@ import _ from "lodash";
 import {logout} from "../../slices/user";
 import {DownOutlined} from "@ant-design/icons";
 import {useNavigate} from "react-router";
+import {Link} from "react-router-dom";
 
 const Header = () => {
 
@@ -37,6 +38,7 @@ const Header = () => {
     return (
         <>
             <StyledHeader>
+                <Link to={'/'} className={'homeBtn'}>Anan</Link>
                 <CustomButton radius="50px" marginx="10px" onClick={handleWrite}>글 쓰기</CustomButton>
                 {_.get(user, 'signed') ?
                     <Dropdown overlay={menu} placement="bottomRight" arrow trigger={['click']}>
@@ -57,6 +59,13 @@ const Header = () => {
 const StyledHeader = styled.div`
     padding: 10px;
     text-align: right;
+    & .homeBtn{
+        float: left;
+        font-size: 20px;
+        color: black;
+        font-family: 'FiraMono';
+        font-weight: bold;
+    }
 `
 
 export default Header

@@ -7,15 +7,21 @@ import { open, close } from "../../slices/modals/loginModal"
 import LoginModal from "../modals/LoginModal";
 import _ from "lodash";
 import {logout} from "../../slices/user";
-import userAPI from "../../api/userAPI";
+import {DownOutlined} from "@ant-design/icons";
+import {useNavigate} from "react-router";
 
-const Header = (props) => {
+const Header = () => {
 
     const dispatch = useDispatch()
+    const navigate = useNavigate();
     const user = useSelector(state => _.get(state, 'user.value'))
 
     const handleLogout = () => {
         dispatch(logout())
+    }
+
+    const handleWrite = () => {
+        navigate('/write')
     }
 
     const menu = (
@@ -31,10 +37,12 @@ const Header = (props) => {
     return (
         <>
             <StyledHeader>
-                <CustomButton radius="50px" marginx="10px">글 쓰기</CustomButton>
+                <CustomButton radius="50px" marginx="10px" onClick={handleWrite}>글 쓰기</CustomButton>
                 {_.get(user, 'signed') ?
                     <Dropdown overlay={menu} placement="bottomRight" arrow trigger={['click']}>
-                        <Button>{_.get(user, 'username')}</Button>
+                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                            {_.get(user, 'username')} <DownOutlined />
+                        </a>
                     </Dropdown>
                     :
                     <CustomButton  radius="50px" onClick={() => dispatch(open()) }>로그인</CustomButton>

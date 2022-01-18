@@ -1,5 +1,6 @@
 package io.ananworld.postservice.global.domain.entity;
 
+import io.ananworld.postservice.global.domain.dto.PostDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,7 +33,14 @@ public class Post extends BaseEntity{
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinTable(name="post_tag",
             joinColumns = @JoinColumn(name="post_id"),
-            inverseJoinColumns = @JoinColumn(name="tag_id")
+            inverseJoinColumns = @JoinColumn(name="tag_name")
     )
     private Set<Tag> tags;
+
+    public Post(PostDto dto, Set<Tag> tags) {
+        this.writerId = dto.getWriterId();
+        this.postTitle = dto.getPostTitle();
+        this.postContent = dto.getPostContent();
+        this.tags = tags;
+    }
 }

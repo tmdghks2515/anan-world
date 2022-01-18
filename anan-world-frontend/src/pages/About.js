@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import {CustomButton} from "../static/styles/buttons";
 import {api} from "../utils/axios";
 import _ from "lodash";
+import Header from "../components/templates/Header";
 
 const About = () => {
 
@@ -22,6 +23,7 @@ const About = () => {
 
     return (
         <>
+            <Header/>
             <h1>소개</h1>
             <p>라액트 라우터를 사용해 보는 프로젝트 입니다</p>
             <CustomButton onClick={click}>

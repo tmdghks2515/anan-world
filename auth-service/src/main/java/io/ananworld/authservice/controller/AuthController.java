@@ -26,7 +26,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDto> login(@RequestBody AuthRequestDto request, HttpServletRequest req, HttpServletResponse res) throws Exception {
         AuthResponseDto dto = userDetailService.createJwtToken(request, req, res);
-        return new ResponseEntity<AuthResponseDto>(dto, HttpStatus.OK);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
     @PostMapping("/register")

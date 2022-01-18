@@ -12,13 +12,13 @@ import userAPI from "./api/userAPI";
 import _ from "lodash";
 import {checkUserStatus, login, setUser} from "./slices/user";
 import {useEffect} from "react";
+import {Container} from "./static/styles/common";
+import Write from "./pages/Write";
 
 const App = () => {
 
     const dispatch =  useDispatch()
     const theme = {}
-
-    const user = useSelector(state => state.user.value)
 
     useEffect(() => {
         dispatch(checkUserStatus())
@@ -28,11 +28,13 @@ const App = () => {
       <CookiesProvider>
           <ThemeProvider theme={theme}>
               <GlobalStyle>
-                <Header/>
-                <Routes>
-                    <Route path="/" element={<Home className="Home"/>} />
-                    <Route path="/about" element={<About/>} />
-                </Routes>
+                  <Container>
+                        <Routes>
+                            <Route path="/" element={<Home/>} />
+                            <Route path="/about" element={<About/>} />
+                            <Route path="/write" element={<Write/>} />
+                        </Routes>
+                  </Container>
               </GlobalStyle>
           </ThemeProvider>
       </CookiesProvider>

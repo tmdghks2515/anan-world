@@ -104,6 +104,7 @@ public class JwtUserDetailService implements UserDetailsService {
     private UserDto createUserDto(String userName) {
         User user = userRepository.findByUsername(userName).get();
         return UserDto.builder()
+                .id(user.getId())
                 .username(user.getUsername())
                 .name(user.getName())
                 .email(user.getEmail())

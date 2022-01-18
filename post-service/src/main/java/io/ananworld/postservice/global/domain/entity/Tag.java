@@ -1,5 +1,6 @@
 package io.ananworld.postservice.global.domain.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -11,13 +12,10 @@ import javax.persistence.*;
 @Getter
 @Table(name="tags")
 @NoArgsConstructor
+@AllArgsConstructor
 public class Tag extends BaseEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="tag_id")
-    public Long tagId;
-
-    @Column(name = "tag_name", length = 30, unique = true)
+    @Column(name = "tag_name", length = 30)
     public String tagName;
 }

@@ -1,27 +1,39 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Header from "../components/templates/Header";
-import {Card} from "antd";
+import {Card, Col, Row, Space} from "antd";
 import Meta from "antd/lib/card/Meta";
 import postAPI from "../api/postAPI";
+import _ from "lodash";
 
 const Home = () => {
 
+    const [posts, setPosts] = useState([])
+
     useEffect(() => {
         postAPI.list({})
-            .then(r => console.log('then r', r))
-            .catch(e => console.log('error e', e))
+            .then(res => {
+                setPosts(res.data)
+            })
+            .catch(e => console.log('error', e))
     }, [])
 
     return (
         <>
             <Header/>
-            <Card
-                hoverable
-                style={{ width: 240 }}
-                cover={<img alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}
-            >
-                <Meta title="Europe Street beat" description="www.instagram.com" />
-            </Card>
+            <Row>
+            {posts.map(post => {
+                return(
+                    <Col span={8}>
+                        <Card
+                            style={{width: 300}}
+                            hoverable
+                        >
+                            <Meta title={post.postTitle} description={post.postContent}/>
+                        </Card>
+                    </Col>
+                )
+            })}
+            </Row>
         </>
     )
 }

@@ -21,8 +21,8 @@ public class Post extends BaseEntity{
     @Column(name = "post_id")
     private Long postId;
 
-    @Column(name="writer_id")
-    private Long writerId;
+    @Column(name="writer_name")
+    private String writerName;
 
     @Column(name="post_title", length = 60)
     private String postTitle;
@@ -38,7 +38,7 @@ public class Post extends BaseEntity{
     private Set<Tag> tags;
 
     public Post(PostDto dto, Set<Tag> tags) {
-        this.writerId = dto.getWriterId();
+        this.writerName = dto.getWriterName();
         this.postTitle = dto.getPostTitle();
         this.postContent = dto.getPostContent();
         this.tags = tags;

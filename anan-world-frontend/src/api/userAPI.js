@@ -1,4 +1,3 @@
-import moment from "moment";
 import {api} from "../utils/axios";
 import jwtDecode from "jwt-decode";
 

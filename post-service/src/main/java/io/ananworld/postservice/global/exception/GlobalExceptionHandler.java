@@ -2,6 +2,7 @@ package io.ananworld.postservice.global.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,6 +20,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity ApiExceptionHandler(ApiException exception) {
         Map<String, Object> body = new HashMap();
         body.put( "message", exception.getMessage());
-        return ResponseEntity.status(exception.getStatus()).body(body);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 }

@@ -39,7 +39,7 @@ public class PostServiceImpl implements PostService {
         log.info("save post - {}", dto);
 
         if(StringUtils.isNullOrEmpty(dto.getPostTitle()) || StringUtils.isNullOrEmpty(dto.getPostContent()))
-            throw new ApiException(HttpStatus.BAD_REQUEST, "포스트의 제목/내용이 작성되지 않았습니다. ");
+            throw new ApiException("포스트의 제목/내용이 작성되지 않았습니다. ");
 
         Set<TagDto> tagDtos = dto.getTags();
         Set<Tag> tags = new HashSet<>();

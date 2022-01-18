@@ -1,5 +1,6 @@
 package io.ananworld.postservice.domain.post.service.impl;
 
+import com.querydsl.core.util.StringUtils;
 import io.ananworld.postservice.domain.post.repository.PostRepository;
 import io.ananworld.postservice.domain.post.repository.TagRepository;
 import io.ananworld.postservice.domain.post.service.PostService;
@@ -37,7 +38,7 @@ public class PostServiceImpl implements PostService {
     public void save(PostDto dto) throws ApiException {
         log.info("save post - {}", dto);
 
-        if(dto.getPostTitle().length() == 0 || dto.getPostContent().length() == 0)
+        if(StringUtils.isNullOrEmpty(dto.getPostTitle()) || StringUtils.isNullOrEmpty(dto.getPostContent()))
             throw new ApiException(HttpStatus.BAD_REQUEST, "포스트의 제목/내용이 작성되지 않았습니다. ");
 
         Set<TagDto> tagDtos = dto.getTags();

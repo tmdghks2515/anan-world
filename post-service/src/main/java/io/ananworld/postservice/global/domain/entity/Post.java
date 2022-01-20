@@ -1,12 +1,14 @@
 package io.ananworld.postservice.global.domain.entity;
 
 import io.ananworld.postservice.global.domain.dto.PostDto;
+import io.ananworld.postservice.global.domain.dto.TagDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @ToString
@@ -42,5 +44,18 @@ public class Post extends BaseEntity{
         this.postTitle = dto.getPostTitle();
         this.postContent = dto.getPostContent();
         this.tags = tags;
+    }
+
+    public PostDto toDto() {
+        PostDto dto = PostDto.builder()
+                .postId(this.postId)
+                .postTitle(this.postTitle)
+                .postContent(this.postContent)
+                .writerName(this.writerName)
+                .build();
+        Set<TagDto> tagsDto = new HashSet<>();
+        tags.forEach(tag -> tagsDto.add(tag.toDto()));
+        dto.setTags(tagsDto);
+        return dto;
     }
 }

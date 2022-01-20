@@ -9,4 +9,6 @@ public interface PostService {
     void save(PostDto dto) throws ApiException;
 
     List<PostDto> list();
+
+    PostDto read(Long postId) throws ApiException;
 }

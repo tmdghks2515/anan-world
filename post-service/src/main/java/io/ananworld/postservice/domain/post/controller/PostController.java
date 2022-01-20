@@ -16,11 +16,6 @@ public class PostController {
 
     private final PostService postService;
 
-    @GetMapping("/info")
-    public String test() {
-        return "성공";
-    }
-
     @PostMapping("/write")
     public ResponseEntity<Void> write(@RequestBody PostDto dto) throws ApiException {
         postService.save(dto);
@@ -31,6 +26,12 @@ public class PostController {
     public ResponseEntity<List<PostDto>> list() {
         List<PostDto> list = postService.list();
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/read")
+    public ResponseEntity<PostDto> read(@RequestParam Long postId) throws ApiException {
+        PostDto dto = postService.read(postId);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
     }
 
 }

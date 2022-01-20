@@ -56,6 +56,13 @@ public class PostServiceImpl implements PostService {
         return postRepositoryCustom.list();
     }
 
+    @Override
+    public PostDto read(Long postId) throws ApiException {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new ApiException("no such post for postId-" + postId));
+        log.debug("post!!{}", post);
+        return post.toDto();
+    }
+
     public Set<Tag> tagDtoSetToEntitySet(Set<TagDto> tagDtos) {
         Set<Tag> tags = new HashSet<>();
         tagDtos.forEach(tagDto -> {

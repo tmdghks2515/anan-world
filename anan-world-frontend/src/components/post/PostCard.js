@@ -6,6 +6,8 @@ import {useNavigate} from "react-router";
 import {useDispatch} from "react-redux";
 import {setPost} from "../../slices/form/post";
 import _ from "lodash";
+import Utils from "../../utils/Utils";
+import {Link} from "react-router-dom";
 
 const PostCard = (props) => {
     const { post }  = props
@@ -15,21 +17,22 @@ const PostCard = (props) => {
         navigate(`/@${post.writerName}/${post.postId}`)
     }
 
-    const getDescription = (content) => {
-        const reg = /[\{\}\[\]\/.,;:|\)*~`^\-_+<>@\#$%&\\\=\(\'\"]/gi
-        const afterReg = content.replace(reg, '')
-        return _.size(afterReg) > 30 ? afterReg.substr(0, 30) + ' ... ' : afterReg
-    }
-
     return (
         <StyledCard
             hoverable
         >
             <StyledMeta
                 title={post.postTitle}
-                description={getDescription(post.postContent)}
+                description={Utils.shortenSentence(post.postContent)}
                 onClick={handleClick}
             />
+            <StyledCardFooter>
+                by &nbsp;
+                <StyledLink to={`/@${post.writerName}`}>
+                    {post.writerName}
+                </StyledLink>
+                · {Utils.getDateDiff(post.createdAt)}
+            </StyledCardFooter>
         </StyledCard>
     )
 }
@@ -37,11 +40,20 @@ const PostCard = (props) => {
 export default PostCard
 
 const StyledCard = styled(Card)`
-    width: 300px;
-    height: 250px;
-    margin 20px 10px;
+    width: 20rem;
+    height: 13rem;
+    margin: 1rem 1rem;
     cursor: default;
 `
 const StyledMeta = styled(Meta)`
     cursor: pointer;
+    height: 10rem;
+`
+const StyledCardFooter = styled.p`
+    color: #b8b8b8;
+    font-size: 0.8rem;
+`
+const StyledLink = styled(Link)`
+    color: black;
+    font-weight: 500;
 `

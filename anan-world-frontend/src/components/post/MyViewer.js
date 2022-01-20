@@ -5,11 +5,12 @@ import {TagsFilled} from "@ant-design/icons";
 import {Tag} from "antd";
 import {Link} from "react-router-dom";
 import _ from "lodash";
+import moment, {now} from "moment";
+import Utils from "../../utils/Utils";
 
 const MyViewer = (props) => {
     const  { post } = props
     const tags =  post.tags
-    console.log(post)
 
     return (
         <>
@@ -17,7 +18,7 @@ const MyViewer = (props) => {
                 {post.postTitle}
             </Title>
             <Info>
-                {post.writerName + ` · ` + post.createdAt}
+                {post.writerName + ` · ` + Utils.getDateDiff(post.createdAt)}
             </Info>
             {_.size(tags) > 0 ?
             <Tags>

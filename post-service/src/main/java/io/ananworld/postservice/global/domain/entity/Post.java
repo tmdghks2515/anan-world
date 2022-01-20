@@ -39,6 +39,8 @@ public class Post extends BaseEntity{
     )
     private Set<Tag> tags;
 
+
+
     public Post(PostDto dto, Set<Tag> tags) {
         this.writerName = dto.getWriterName();
         this.postTitle = dto.getPostTitle();
@@ -52,6 +54,8 @@ public class Post extends BaseEntity{
                 .postTitle(this.postTitle)
                 .postContent(this.postContent)
                 .writerName(this.writerName)
+                .createdAt(this.getCreatedAt())
+                .modifiedAt(this.getModifiedAt())
                 .build();
         Set<TagDto> tagsDto = new HashSet<>();
         tags.forEach(tag -> tagsDto.add(tag.toDto()));

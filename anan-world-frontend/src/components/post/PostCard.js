@@ -30,7 +30,7 @@ const PostCard = (props) => {
                 by &nbsp;
                 <StyledLink to={`/@${post.writerName}`}>
                     {post.writerName}
-                </StyledLink>
+                </StyledLink>&nbsp;
                 · {Utils.getDateDiff(post.createdAt)}
             </StyledCardFooter>
         </StyledCard>
@@ -40,9 +40,8 @@ const PostCard = (props) => {
 export default PostCard
 
 const StyledCard = styled(Card)`
-    width: 20rem;
+    width: 15rem;
     height: 13rem;
-    margin: 1rem 1rem;
     cursor: default;
 `
 const StyledMeta = styled(Meta)`

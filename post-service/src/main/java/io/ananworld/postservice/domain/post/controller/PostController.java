@@ -22,13 +22,13 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/list")
+    @GetMapping("/open/postList")
     public ResponseEntity<List<PostDto>> list() {
         List<PostDto> list = postService.list();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/read")
+    @GetMapping("/open/read")
     public ResponseEntity<PostDto> read(@RequestParam Long postId) throws ApiException {
         PostDto dto = postService.read(postId);
         return new ResponseEntity<>(dto, HttpStatus.OK);

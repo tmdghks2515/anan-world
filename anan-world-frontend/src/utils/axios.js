@@ -18,7 +18,7 @@ export const api = axios.create({
     }
 })
 
-const authlessUrls = ['/user/login', '/user/register', '/user/refreshJwt']
+const authlessUrls = ['/user/login', '/user/register', '/user/refreshJwt' , '/post/list']
 
 api.interceptors.request.use(
     async config => {

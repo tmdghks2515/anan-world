@@ -11,6 +11,10 @@ class Utils {
             return diff+'분 전'
         if(diff < 60*24)
             return moment().diff(date, 'hours') + '시간 전'
+        if(diff < 60*24*2)
+            return '어제'
+        if(diff < 60*24*31)
+            return moment().diff(date, 'days') + '일 전'
         return moment(date).format("YYYY년 MM월 DD일")
     }
 

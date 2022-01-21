@@ -5,11 +5,11 @@ const write = (post) => {
 }
 
 const list = (data) => {
-    return api.get('/post/list', data)
+    return api.get('/post/open/postList', data)
 }
 
 const read = (postId) => {
-    return api.get(`/post/read?postId=${postId}`, {})
+    return api.get(`/post/open/read?postId=${postId}`, {})
 }
 
 const postAPI = {

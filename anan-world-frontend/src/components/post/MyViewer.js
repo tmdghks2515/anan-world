@@ -32,7 +32,7 @@ const MyViewer = (props) => {
             }
             {post.postContent ?
                 <Viewer
-                initialValue={post.postContent}
+                    initialValue={post.postContent}
                 />
             : ''}
         </>

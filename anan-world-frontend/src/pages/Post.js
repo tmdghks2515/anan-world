@@ -3,6 +3,8 @@ import MyViewer from "../components/post/MyViewer";
 import {useParams} from "react-router-dom";
 import styled from "styled-components";
 import postAPI from "../api/postAPI";
+import Profile from "../components/user/Profile";
+import {Divider} from "antd";
 
 const Post = (props) => {
     const {username, postId} = useParams()
@@ -28,6 +30,10 @@ const Post = (props) => {
                 username={username}
                 post={post}
             />
+            <Divider/>
+            <Profile
+                writerName={post.writerName}
+            />
         </ViewerContainer>
     )
 }
@@ -35,7 +41,8 @@ const Post = (props) => {
 export default Post
 
 const ViewerContainer = styled.div`
-    width: 70%;
+    width: 55%;
+    min-width: 30rem;
     margin: 0 auto;
     background-color: white;
 `

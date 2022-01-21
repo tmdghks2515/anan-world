@@ -3,6 +3,7 @@ import {message} from "antd";
 import userAPI from "../api/userAPI";
 import _ from "lodash";
 import jwtDecode from "jwt-decode";
+import moment from "moment";
 
 const initialState = {value : { id: "", username: "", name: "", email: "", roles: [] , signed: false}};
 
@@ -18,19 +19,22 @@ export const login = createAsyncThunk('user/login', async data => {
 
 export const checkUserStatus = createAsyncThunk('user/checkUserStatus', async () => {
     const expAt = localStorage.getItem('expAt')
-    
+
     if (expAt > Date.now()) {
         // accessToken 유효기간 안 지났을 경우
         const user = JSON.parse(localStorage.getItem('user'))
         return {user}
-    } else if (expAt < Date.now()) {
+    } else if (_.isNull(expAt)) {
+        //accessToken 이 없는 경우
+        console.log('accessToken 없음')
+        return {user: initialState.value}
+    } else {
         // accessToken 유효기간 지났을 경우
         const res = await userAPI.refreshJwt();
         const user = _.get(res, 'data.user');
+        console.log('accessToken 유효기간 지남')
+        console.log('expAt', expAt)
         return {user};
-    } else {
-        //accessToken 이 없는 경우
-        return {user: initialState.value}
     }
     
 })

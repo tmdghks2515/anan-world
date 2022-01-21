@@ -21,7 +21,7 @@ const Home = () => {
             <Row>
             {posts.map(post => {
                 return(
-                    <Col span={8} key={_.get(post, 'postId')}>
+                    <Col span={6} key={_.get(post, 'postId')}>
                         <PostCard post={post}/>
                     </Col>
                 )

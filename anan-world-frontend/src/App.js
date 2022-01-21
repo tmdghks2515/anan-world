@@ -7,37 +7,54 @@ import Header from "./components/templates/Header";
 import {ThemeProvider} from "styled-components"
 import {GlobalStyle} from "./static/styles/global";
 import {CookiesProvider} from "react-cookie";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {checkUserStatus} from "./slices/user";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {Container} from "./static/styles/common";
 import Write from "./pages/Write";
 import Post from "./pages/Post";
+import {useLocation, useNavigate} from "react-router";
+import {message} from "antd";
+import _ from "lodash";
 
 const App = () => {
 
     const dispatch =  useDispatch()
-    const theme = {}
+    const location = useLocation()
+    const navigate = useNavigate()
+    const signNeededUrl = ['/write']
+    const noHeaderPages = ['/write']
+    const user = useSelector(state => _.get(state, 'user.value'))
+    const [headerYn, setHeaderYn] = useState(true)
 
     useEffect(() => {
         dispatch(checkUserStatus())
     }, [])
 
+    useEffect((e) => {
+        if (signNeededUrl.includes(location.pathname) && !user.signed)
+            navigate(-1)
+        if(noHeaderPages.includes(location.pathname))
+            setHeaderYn(false)
+        else
+            setHeaderYn(true)
+    }, [location])
+
   return (
       <CookiesProvider>
-          <ThemeProvider theme={theme}>
-              <GlobalStyle>
-                  <Container>
-                    <Header/>
-                        <Routes>
-                            <Route path="/" element={<Home/>} />
-                            <Route path="/about" element={<About/>} />
-                            <Route path="/write" element={<Write/>} />
-                            <Route path={`/@:username/:postId`} element={<Post/>}/>
-                        </Routes>
-                  </Container>
-              </GlobalStyle>
-          </ThemeProvider>
+          <GlobalStyle>
+              <Container>
+                  {headerYn ?
+                    <Header/> : null
+                  }
+                <Routes>
+                    <Route path="/" element={<Home/>} />
+                    <Route path="/about" element={<About/>} />
+                    <Route path="/write" element={<Write/>} />
+                    <Route path={`/@:username/:postId`} element={<Post/>}/>
+                </Routes>
+              </Container>
+          </GlobalStyle>
       </CookiesProvider>
   );
 }

@@ -12,8 +12,12 @@ const read = (postId) => {
     return api.get(`/post/open/read?postId=${postId}`, {})
 }
 
+const comment = (comment) => {
+    return api.post(`/post/comment`, comment)
+}
+
 const postAPI = {
-    write, list, read
+    write, list, read, comment
 }
 
 export default postAPI

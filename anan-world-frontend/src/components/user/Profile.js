@@ -24,7 +24,7 @@ const Profile = (props) => {
 export default Profile
 
 const ProfileContainer = styled.div`
-    margin: 3rem 0; 
+    margin: 3rem 0 1.5rem 0; 
     vertical-align: top;
     & .wrtBy{
         margin: 0 0.5rem 0 1rem;

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react"
-import {Button, Col, Dropdown, Menu, Modal, Row} from "antd";
+import {Button, Col, Dropdown, Menu, message, Modal, Row} from "antd";
 import {CustomButton} from "../../static/styles/buttons";
 import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
@@ -14,27 +14,16 @@ import {Link} from "react-router-dom";
 const Header = () => {
 
     const dispatch = useDispatch()
-    const location = useLocation()
     const navigate = useNavigate();
     const user = useSelector(state => _.get(state, 'user.value'))
-    const noHeaderPages = ['/write']
-    const [headerYn, setHeaderYn] = useState(true)
-
-    useEffect(() => {
-        checkHeaderYn()
-    }, [location])
 
     const handleLogout = () => {
         dispatch(logout())
+        message.success('로그아웃')
     }
 
     const handleWrite = () => {
         navigate('/write')
-    }
-
-    const checkHeaderYn = () => {
-        console.log('location', location)
-        setHeaderYn(!noHeaderPages.includes(location.pathname))
     }
 
     const menu = (
@@ -48,12 +37,12 @@ const Header = () => {
     );
 
     return (
-        <>{
-            headerYn ?
             <>
                 <StyledHeader>
                     <Link to={'/'} className={'homeBtn'}>Anan</Link>
-                    <CustomButton radius="50px" marginx="10px" onClick={handleWrite}>글 쓰기</CustomButton>
+                    {user.signed ?
+                        <CustomButton radius="50px" marginx="10px" onClick={handleWrite}>글 쓰기</CustomButton> : null
+                    }
                     {_.get(user, 'signed') ?
                         <Dropdown overlay={menu} placement="bottomRight" arrow trigger={['click']}>
                             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
@@ -67,9 +56,6 @@ const Header = () => {
 
                 <LoginModal/>
             </>
-            : null
-        }
-        </>
     )
 }
 

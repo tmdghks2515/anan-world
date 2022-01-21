@@ -32,7 +32,7 @@ public class Comment extends BaseEntity{
         return CommentDto.builder()
                 .commentContent(this.commentContent)
                 .commentId(this.commentId)
-                .postDto(this.post.toDto())
+                .postId(this.post.getPostId())
                 .writerId(this.writerId)
                 .build();
     }

@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @ToString
@@ -39,6 +40,8 @@ public class Post extends BaseEntity{
     )
     private Set<Tag> tags;
 
+    @OneToMany(mappedBy = "commentId", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    private List<Comment> comments;
 
 
     public Post(PostDto dto, Set<Tag> tags) {

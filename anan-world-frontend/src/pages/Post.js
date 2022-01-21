@@ -5,6 +5,7 @@ import styled from "styled-components";
 import postAPI from "../api/postAPI";
 import Profile from "../components/user/Profile";
 import {Divider} from "antd";
+import CommentsBlock from "../components/post/comment/CommentsBlock";
 
 const Post = (props) => {
     const {username, postId} = useParams()
@@ -30,9 +31,12 @@ const Post = (props) => {
                 username={username}
                 post={post}
             />
-            <Divider/>
             <Profile
                 writerName={post.writerName}
+            />
+            <Divider/>
+            <CommentsBlock
+                post={post}
             />
         </ViewerContainer>
     )

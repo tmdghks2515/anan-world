@@ -9,7 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class CommentDto {
     private Long commentId;
-    private PostDto postDto;
+    private Long postId;
     private Long writerId;
     private String commentContent;
 }

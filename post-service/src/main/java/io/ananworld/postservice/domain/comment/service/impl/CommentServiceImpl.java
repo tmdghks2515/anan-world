@@ -19,7 +19,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void comment(CommentDto dto) throws ApiException {
-        Post post = postRepository.findById(dto.getPostDto().getPostId()).orElseThrow(() -> new ApiException("해당 포스트는 존재하지 않습니다."));
+        Post post = postRepository.findById(dto.getPostId()).orElseThrow(() -> new ApiException("해당 포스트는 존재하지 않습니다."));
         Comment comment = Comment.builder()
                 .commentContent(dto.getCommentContent())
                 .post(post)

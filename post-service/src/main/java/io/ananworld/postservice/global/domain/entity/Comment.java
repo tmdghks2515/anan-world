@@ -1,18 +1,17 @@
 package io.ananworld.postservice.global.domain.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import io.ananworld.postservice.global.domain.dto.CommentDto;
+import lombok.*;
 
 import javax.persistence.*;
 
 @ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Entity
-public class Comment {
+public class Comment extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,4 +27,13 @@ public class Comment {
 
     @Column(name="comment_content", columnDefinition = "TEXT")
     private String commentContent;
+
+    public CommentDto toDto() {
+        return CommentDto.builder()
+                .commentContent(this.commentContent)
+                .commentId(this.commentId)
+                .postDto(this.post.toDto())
+                .writerId(this.writerId)
+                .build();
+    }
 }

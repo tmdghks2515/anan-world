@@ -1,7 +1,23 @@
 package io.ananworld.postservice.domain.comment.controller;
 
-import org.springframework.stereotype.Controller;
+import io.ananworld.postservice.domain.comment.service.CommentService;
+import io.ananworld.postservice.global.domain.dto.CommentDto;
+import io.ananworld.postservice.global.exception.ApiException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
+@RequiredArgsConstructor
 public class CommentController {
+
+    private final CommentService commentService;
+
+    public ResponseEntity<Void> comment(@RequestParam CommentDto dto) throws ApiException {
+        commentService.comment(dto);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

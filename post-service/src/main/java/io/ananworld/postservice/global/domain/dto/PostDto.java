@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -17,7 +18,7 @@ public class PostDto {
     private String postContent;
     private String writerName;
     private Set<TagDto> tags;
-    private Set<CommentDto> comments;
+    private List<CommentDto> comments;
     private String createdAt;
     private String modifiedAt;
 

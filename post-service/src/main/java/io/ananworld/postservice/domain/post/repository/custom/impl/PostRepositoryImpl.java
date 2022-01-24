@@ -4,6 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.ananworld.postservice.domain.post.repository.custom.PostRepositoryCustom;
 import io.ananworld.postservice.global.domain.dto.PostDto;
+import io.ananworld.postservice.global.domain.entity.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -28,5 +29,10 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 ))
                 .from(post)
                 .fetch();
+    }
+
+    @Override
+    public Post read() {
+        return null;
     }
 }

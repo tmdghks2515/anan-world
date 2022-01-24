@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -39,10 +40,11 @@ public class Post extends BaseEntity{
             joinColumns = @JoinColumn(name="post_id"),
             inverseJoinColumns = @JoinColumn(name="tag_name")
     )
-    private Set<Tag> tags;
+    private Set<Tag> tags = new HashSet<>();
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
-    private List<Comment> comments;
+    @OrderBy("createdAt desc")
+    private List<Comment> comments = new ArrayList<>();
 
 
     public Post(PostDto dto, Set<Tag> tags) {
@@ -66,7 +68,7 @@ public class Post extends BaseEntity{
         tags.forEach(tag -> tagsDto.add(tag.toDto()));
         dto.setTags(tagsDto);
 
-        Set<CommentDto> commentsDto = new HashSet<>();
+        List<CommentDto> commentsDto = new ArrayList<>();
         comments.forEach(comment -> commentsDto.add(comment.toDto()));
         dto.setComments(commentsDto);
 

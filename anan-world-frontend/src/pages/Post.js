@@ -37,6 +37,7 @@ const Post = (props) => {
             <Divider/>
             <CommentsBlock
                 post={post}
+                read={read}
             />
         </ViewerContainer>
     )

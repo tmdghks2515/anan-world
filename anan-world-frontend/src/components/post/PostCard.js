@@ -8,6 +8,7 @@ import {setPost} from "../../slices/form/post";
 import _ from "lodash";
 import Utils from "../../utils/Utils";
 import {Link} from "react-router-dom";
+import moment from "moment";
 
 const PostCard = (props) => {
     const { post }  = props
@@ -31,7 +32,7 @@ const PostCard = (props) => {
                 <StyledLink to={`/@${post.writerName}`}>
                     {post.writerName}
                 </StyledLink>&nbsp;
-                · {Utils.getDateDiff(post.createdAt)}
+                · {moment(post.createdAt).fromNow()}
             </StyledCardFooter>
         </StyledCard>
     )

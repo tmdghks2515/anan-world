@@ -5,7 +5,7 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@ToString
+@ToString(exclude = "post")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,6 +34,8 @@ public class Comment extends BaseEntity{
                 .commentId(this.commentId)
                 .postId(this.post.getPostId())
                 .writerId(this.writerId)
+                .createdAt(this.getCreatedAt())
+                .modifiedAt(this.getModifiedAt())
                 .build();
     }
 }

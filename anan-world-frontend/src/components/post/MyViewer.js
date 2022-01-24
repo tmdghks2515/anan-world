@@ -18,7 +18,7 @@ const MyViewer = (props) => {
                 {post.postTitle}
             </Title>
             <Info>
-                {post.writerName + ` · ` + Utils.getDateDiff(post.createdAt)}
+                {post.writerName + ` · ` + moment(post.createdAt).fromNow()}
             </Info>
             {_.size(tags) > 0 ?
             <Tags>

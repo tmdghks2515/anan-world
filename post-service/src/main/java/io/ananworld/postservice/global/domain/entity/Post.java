@@ -1,5 +1,6 @@
 package io.ananworld.postservice.global.domain.entity;
 
+import io.ananworld.postservice.global.domain.dto.CommentDto;
 import io.ananworld.postservice.global.domain.dto.PostDto;
 import io.ananworld.postservice.global.domain.dto.TagDto;
 import lombok.AllArgsConstructor;
@@ -40,7 +41,7 @@ public class Post extends BaseEntity{
     )
     private Set<Tag> tags;
 
-    @OneToMany(mappedBy = "commentId", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
     private List<Comment> comments;
 
 
@@ -60,9 +61,15 @@ public class Post extends BaseEntity{
                 .createdAt(this.getCreatedAt())
                 .modifiedAt(this.getModifiedAt())
                 .build();
+
         Set<TagDto> tagsDto = new HashSet<>();
         tags.forEach(tag -> tagsDto.add(tag.toDto()));
         dto.setTags(tagsDto);
+
+        Set<CommentDto> commentsDto = new HashSet<>();
+        comments.forEach(comment -> commentsDto.add(comment.toDto()));
+        dto.setComments(commentsDto);
+
         return dto;
     }
 }

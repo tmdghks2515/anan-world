@@ -2,11 +2,10 @@ import React from 'react'
 import CommentWrite from "./CommentWrite";
 import {useSelector} from "react-redux";
 import _ from "lodash";
-import {Comment} from "antd";
 import CustomComment from "./CustomComment";
 
 const CommentsBlock = (props) => {
-    const {post} = props
+    const {post, read} = props
     const user = useSelector(state => _.get(state, 'user.value'))
 
     return (
@@ -15,9 +14,15 @@ const CommentsBlock = (props) => {
                 <CommentWrite
                     user={user}
                     post={post}
+                    read={read}
                 /> : null
             }
-            <CustomComment/>
+            {post.comments && post.comments.map(comment =>
+                <CustomComment
+                    key={_.get(comment, 'commentId')}
+                    comment={comment}
+                />
+            )}
         </>
     )
 }

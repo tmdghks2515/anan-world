@@ -16,6 +16,8 @@ import Post from "./pages/Post";
 import {useLocation, useNavigate} from "react-router";
 import {message} from "antd";
 import _ from "lodash";
+import 'moment/locale/ko'
+import moment from "moment";
 
 const App = () => {
 

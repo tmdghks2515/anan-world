@@ -18,7 +18,13 @@ const MyViewer = (props) => {
                 {post.postTitle}
             </Title>
             <Info>
-                {post.writerName + ` · ` + moment(post.createdAt).fromNow()}
+                <Link
+                    to={`/${post.writerName}`}
+                    style={{color: '#a8a8a8', textDecoration: 'underline'}}
+                >
+                    {post.writerName}
+                </Link>
+                ·  {moment(post.createdAt).fromNow()}
             </Info>
             {_.size(tags) > 0 ?
             <Tags>
@@ -48,7 +54,10 @@ const Title = styled.p`
     `
 const Info = styled.p`
     margin-bottom: 1rem;
-    color: #212529;
+    color: #a8a8a8;
+    & Link :hover{
+        color: red;
+    }
 `
 const Tags = styled.p`
     margin-bottom: 3rem;

@@ -14,6 +14,7 @@ const Profile = (props) => {
             <Link
                 className={'wrtName'}
                 to={`/@${writerName}`}
+                style={{color: 'black', textDecoration: 'underline'}}
             >
                  {writerName}
             </Link>

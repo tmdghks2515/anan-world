@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {createRef, useEffect, useState} from 'react'
 import {Button, Input} from "antd";
 import styled from "styled-components";
 import _ from "lodash";
@@ -8,10 +8,15 @@ import postAPI from "../../../api/postAPI";
 const CommentWrite = (props) => {
     const { user, post, read } = props
     const { TextArea } = Input
-    const comment = {writerId: user.id, commentContent: '', postId: post.postId}
+    const initialComment = {writerId: user.id, commentContent: '', postId: post.postId}
+    const [comment, setComment] = useState({})
+
+    useEffect(() => {
+        setComment(initialComment)
+    }, [post])
 
     const commentOnChange = (e) => {
-        comment.commentContent = _.get(e, 'target.value')
+        setComment({...comment, commentContent: _.get(e, 'target.value')})
     }
 
     const handleComment = async () => {
@@ -20,6 +25,7 @@ const CommentWrite = (props) => {
         const res = await postAPI.comment(comment);
         if(_.isEqual(res.status, 200))
             read()
+        setComment(initialComment)
     }
 
     return (
@@ -27,6 +33,7 @@ const CommentWrite = (props) => {
             <TextArea
                 placeholder={'의견을 남겨 주세요'}
                 onChange={commentOnChange}
+                value={_.get(comment, 'commentContent')}
             />
             <Button onClick={handleComment}>댓글 작성</Button>
         </Container>

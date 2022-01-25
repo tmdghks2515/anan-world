@@ -8,8 +8,12 @@ const list = (data) => {
     return api.get('/post/open/postList', data)
 }
 
-const read = (postId) => {
-    return api.get(`/post/open/read?postId=${postId}`, {})
+const read = (data) => {
+    return api.get(`/post/open/read?postId=${data.postId}`, {})
+}
+
+const comments = (data) => {
+    return api.get(`/post/open/comments?postId=${data.postId}&size=${data.size ? data.size : '10'}${data.sort ? '&sort=' + data.sort : ''}`, {})
 }
 
 const comment = (comment) => {
@@ -17,7 +21,7 @@ const comment = (comment) => {
 }
 
 const postAPI = {
-    write, list, read, comment
+    write, list, read, comment, comments
 }
 
 export default postAPI

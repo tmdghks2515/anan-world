@@ -6,7 +6,7 @@ import postAPI from "../../../api/postAPI";
 
 
 const CommentWrite = (props) => {
-    const { user, post, read } = props
+    const { user, post, load } = props
     const { TextArea } = Input
     const initialComment = {writerId: user.id, commentContent: '', postId: post.postId}
     const [comment, setComment] = useState({})
@@ -23,8 +23,10 @@ const CommentWrite = (props) => {
         if (_.isEmpty(_.trim(comment.commentContent)))
             return
         const res = await postAPI.comment(comment);
-        if(_.isEqual(res.status, 200))
-            read()
+        if (_.isEqual(res.status, 200)) {
+            console.log('!!!')
+            load()
+        }
         setComment(initialComment)
     }
 

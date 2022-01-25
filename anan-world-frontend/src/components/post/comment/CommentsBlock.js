@@ -1,11 +1,14 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import CommentWrite from "./CommentWrite";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import _ from "lodash";
 import CustomComment from "./CustomComment";
+import {Button} from "antd";
+import postAPI from "../../../api/postAPI";
+import {setPost} from "../../../slices/form/post";
 
 const CommentsBlock = (props) => {
-    const {post, read} = props
+    const {post, load} = props
     const user = useSelector(state => _.get(state, 'user.value'))
 
     return (
@@ -14,7 +17,7 @@ const CommentsBlock = (props) => {
                 <CommentWrite
                     user={user}
                     post={post}
-                    read={read}
+                    load={load}
                 /> : null
             }
             {post.comments && post.comments.map(comment =>
@@ -24,7 +27,7 @@ const CommentsBlock = (props) => {
                 />
             )}
         </>
-    )
+    );
 }
 
 export default CommentsBlock

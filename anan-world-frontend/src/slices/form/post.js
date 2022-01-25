@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import postAPI from "../../api/postAPI";
 
-const initialState = {value: {postTitle: '', postContent: '', tags: [], writerName: '', created: '', modified: ''}}
+const initialState = {value: {postTitle: '', postContent: '', tags: [], writerName: '', commentsCnt: 0, createdAt: '', modifiedAt: '', comments: []}}
 
 export const write = createAsyncThunk('post/write', async data => {
     return await postAPI.write(data)

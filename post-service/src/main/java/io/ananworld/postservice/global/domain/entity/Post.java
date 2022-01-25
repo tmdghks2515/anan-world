@@ -7,12 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @ToString
 @Entity
@@ -35,17 +33,19 @@ public class Post extends BaseEntity{
     @Column(columnDefinition = "TEXT", name="post_content")
     private String postContent;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinTable(name="post_tag",
             joinColumns = @JoinColumn(name="post_id"),
             inverseJoinColumns = @JoinColumn(name="tag_name")
     )
-    private Set<Tag> tags = new HashSet<>();
+    private Collection<Tag> tags = new HashSet<>();
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = { CascadeType.ALL })
     @OrderBy("createdAt desc")
-    private List<Comment> comments = new ArrayList<>();
+    private Collection<Comment> comments = new ArrayList<>();
 
+    @Formula("(select count(*) from comment c where c.post_id = post_id)")
+    private Integer commentsCnt;
 
     public Post(PostDto dto, Set<Tag> tags) {
         this.writerName = dto.getWriterName();
@@ -55,23 +55,14 @@ public class Post extends BaseEntity{
     }
 
     public PostDto toDto() {
-        PostDto dto = PostDto.builder()
+        return PostDto.builder()
                 .postId(this.postId)
                 .postTitle(this.postTitle)
                 .postContent(this.postContent)
                 .writerName(this.writerName)
                 .createdAt(this.getCreatedAt())
                 .modifiedAt(this.getModifiedAt())
+                .commentsCnt(this.commentsCnt)
                 .build();
-
-        Set<TagDto> tagsDto = new HashSet<>();
-        tags.forEach(tag -> tagsDto.add(tag.toDto()));
-        dto.setTags(tagsDto);
-
-        List<CommentDto> commentsDto = new ArrayList<>();
-        comments.forEach(comment -> commentsDto.add(comment.toDto()));
-        dto.setComments(commentsDto);
-
-        return dto;
     }
 }

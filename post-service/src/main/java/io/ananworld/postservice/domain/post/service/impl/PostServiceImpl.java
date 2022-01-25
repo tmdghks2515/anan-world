@@ -7,17 +7,21 @@ import io.ananworld.postservice.domain.post.repository.custom.PostRepositoryCust
 import io.ananworld.postservice.domain.post.service.PostService;
 import io.ananworld.postservice.global.domain.dto.PostDto;
 import io.ananworld.postservice.global.domain.dto.TagDto;
+import io.ananworld.postservice.global.domain.entity.Comment;
 import io.ananworld.postservice.global.domain.entity.Post;
 import io.ananworld.postservice.global.domain.entity.Tag;
 import io.ananworld.postservice.global.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -58,9 +62,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDto read(Long postId) throws ApiException {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new ApiException("no such post for postId-" + postId));
-        log.debug("post!!{}", post);
-        return post.toDto();
+        Post post = postRepository.findWithTagsByPostId(postId).orElseThrow(() -> new ApiException("no such post for postId-" + postId));
+        PostDto dto = post.toDto();
+        dto.setTags(tagsToTagDtos(post.getTags()));
+        return dto;
     }
 
     public Set<Tag> tagDtoSetToEntitySet(Set<TagDto> tagDtos) {
@@ -72,5 +77,13 @@ public class PostServiceImpl implements PostService {
             tags.add(tagRepository.findById(tagName).get());
         });
         return tags;
+    }
+
+    public Set<TagDto> tagsToTagDtos(Collection<Tag> tags) {
+        Set<TagDto> dtos = new HashSet<>();
+        tags.forEach(tag -> {
+            dtos.add(tag.toDto());
+        });
+        return dtos;
     }
 }

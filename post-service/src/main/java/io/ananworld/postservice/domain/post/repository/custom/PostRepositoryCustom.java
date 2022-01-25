@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface PostRepositoryCustom {
     List<PostDto> list();
-    Post read();
 }

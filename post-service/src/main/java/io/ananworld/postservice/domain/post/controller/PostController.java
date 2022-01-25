@@ -1,9 +1,12 @@
 package io.ananworld.postservice.domain.post.controller;
 
 import io.ananworld.postservice.domain.post.service.PostService;
+import io.ananworld.postservice.global.domain.dto.CommentDto;
 import io.ananworld.postservice.global.domain.dto.PostDto;
 import io.ananworld.postservice.global.exception.ApiException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

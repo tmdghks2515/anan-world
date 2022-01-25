@@ -1,13 +1,18 @@
 package io.ananworld.postservice.domain.post.repository.custom.impl;
 
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.ananworld.postservice.domain.post.repository.custom.PostRepositoryCustom;
 import io.ananworld.postservice.global.domain.dto.PostDto;
 import io.ananworld.postservice.global.domain.entity.Post;
+import io.ananworld.postservice.global.domain.entity.QComment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import java.util.List;
+
+import static io.ananworld.postservice.global.domain.entity.QComment.comment;
 import static io.ananworld.postservice.global.domain.entity.QPost.post;
 
 @Repository
@@ -31,8 +36,4 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .fetch();
     }
 
-    @Override
-    public Post read() {
-        return null;
-    }
 }

@@ -19,6 +19,7 @@ public class PostDto {
     private String writerName;
     private Set<TagDto> tags;
     private List<CommentDto> comments;
+    private Integer commentsCnt;
     private String createdAt;
     private String modifiedAt;
 

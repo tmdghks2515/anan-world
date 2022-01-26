@@ -4,11 +4,12 @@ import {useParams} from "react-router-dom";
 import styled from "styled-components";
 import postAPI from "../api/postAPI";
 import Profile from "../components/user/Profile";
-import {Divider} from "antd";
+import {Affix, Button, Col, Divider, Row} from "antd";
 import CommentsBlock from "../components/post/comment/CommentsBlock";
 import {useDispatch, useSelector} from "react-redux";
 import {read, setPost} from "../slices/form/post";
 import _ from "lodash";
+import {HeartOutlined} from "@ant-design/icons";
 
 const Post = (props) => {
     const {username, postId} = useParams()
@@ -34,34 +35,63 @@ const Post = (props) => {
     }
 
     window.onscroll = () => {
-        console.log(document.body.scrollHeight - window.innerHeight - window.scrollY)
         if (document.body.scrollHeight - (window.innerHeight + window.scrollY) < 1)
             scrollBottom()
     }
 
     return (
-        <ViewerContainer>
-            <MyViewer
-                post={post}
-            />
-            <Profile
-                writerName={post.writerName}
-            />
-            <Divider/>
-            <CommentsBlock
-                post={post}
-                setPost={setPost}
-                load={load}
-            />
-        </ViewerContainer>
+        <Row>
+            <Col span={4}>
+                <StyledAffix
+                    offsetTop={50}
+                >
+                    <AffixContainer>
+                        <StyledButton
+                            size={"large"}
+                            // onClick={() => {
+                            //     this.setState({
+                            //         top: this.state.top + 10,
+                            //     });
+                            // }}
+                        >
+                            <HeartOutlined style={{fontSize: 20, color: '#c8c8c8'}}/>
+                        </StyledButton>
+                    </AffixContainer>
+                </StyledAffix>
+            </Col>
+            <Col span={16}>
+                <MyViewer
+                    post={post}
+                />
+                <Profile
+                    writerName={post.writerName}
+                />
+                <Divider/>
+                <CommentsBlock
+                    post={post}
+                    setPost={setPost}
+                    load={load}
+                />
+            </Col>
+        </Row>
     )
 }
 
 export default Post
 
-const ViewerContainer = styled.div`
-    width: 55%;
-    min-width: 30rem;
+const StyledAffix = styled(Affix)`
+    margin-top: 12rem;
+`
+const AffixContainer = styled.div`
     margin: 0 auto;
-    background-color: white;
+    text-align: center;
+    height: 8rem;
+    width: 4rem;
+    border-radius: 5rem;
+    background-color: #eee;
+`
+const StyledButton = styled(Button)`
+    height: 3rem;
+    border-radius: 100rem;
+    margin-top: 1rem;
 `

@@ -3,6 +3,7 @@ import {Col, Row} from "antd";
 import postAPI from "../api/postAPI";
 import PostCard from "../components/post/PostCard";
 import _ from "lodash";
+import styled from "styled-components";
 
 const Home = () => {
 
@@ -17,18 +18,21 @@ const Home = () => {
     }, [])
 
     return (
-        <>
-            <Row>
+        <HomeContainer>
             {posts.map(post => {
                 return(
-                    <Col span={6} key={_.get(post, 'postId')}>
-                        <PostCard post={post}/>
-                    </Col>
+                    <PostCard
+                        key={post.postId}
+                        post={post}
+                    />
                 )
             })}
-            </Row>
-        </>
+        </HomeContainer>
     )
 }
 
 export default Home
+
+const HomeContainer = styled.div`
+    text-align: center;
+`

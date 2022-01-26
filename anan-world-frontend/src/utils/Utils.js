@@ -1,11 +1,9 @@
-import _ from "lodash";
-
 class Utils {
 
     shortenSentence(str) {
-        const reg = /[\{\}\[\]\/.,;:|\)*~`^\-_+<>@\#$%&\\\=\(\'\"]/gi
-        const afterReg = str.replace(reg, '')
-        return _.size(afterReg) > 50 ? afterReg.substr(0, 50) + ' ... ' : afterReg
+        const tagRemoved = str.replaceAll(/(<([^>]+)>)/gi, '');
+        const ssRemoved = tagRemoved.replace(/[\{\}\[\]\/.,;:|\)*~`^\-_+<>@\#$%&\\\=\(\'\"]/gi, '')
+        return ssRemoved.length < 150 ? ssRemoved : ssRemoved.substr(0, 150) + '...'
     }
 
 }

@@ -5,7 +5,7 @@ const write = (post) => {
 }
 
 const list = (data) => {
-    return api.get('/post/open/postList', data)
+    return api.get('/post/open/list', data)
 }
 
 const read = (data) => {

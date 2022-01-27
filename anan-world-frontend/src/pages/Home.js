@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {Col, Row} from "antd";
 import postAPI from "../api/postAPI";
 import PostCard from "../components/post/PostCard";
-import _ from "lodash";
 import styled from "styled-components";
 
 const Home = () => {

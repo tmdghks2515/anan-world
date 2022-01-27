@@ -47,6 +47,12 @@ public class Post extends BaseEntity{
     @Formula("(select count(*) from comment c where c.post_id = post_id)")
     private Integer commentsCnt;
 
+    @Formula("(select count(*) from post_like pl where pl.post_id = post_id)")
+    private Integer postLikeCnt;
+
+    @Formula("(select count(*) from post_visit pv where pv.post_id = post_id)")
+    private Integer postVisitCnt;
+
     public Post(PostDto dto, Set<Tag> tags) {
         this.writerName = dto.getWriterName();
         this.postTitle = dto.getPostTitle();
@@ -63,6 +69,8 @@ public class Post extends BaseEntity{
                 .createdAt(this.getCreatedAt())
                 .modifiedAt(this.getModifiedAt())
                 .commentsCnt(this.commentsCnt)
+                .postLikeCnt(this.postLikeCnt)
+                .postVisitCnt(this.postVisitCnt)
                 .build();
     }
 }

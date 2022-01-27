@@ -1,21 +1,21 @@
 package io.ananworld.postservice.domain.post.service.impl;
 
 import com.querydsl.core.util.StringUtils;
+import io.ananworld.postservice.domain.post.repository.PostLikeRepository;
 import io.ananworld.postservice.domain.post.repository.PostRepository;
+import io.ananworld.postservice.domain.post.repository.PostVisitRepository;
 import io.ananworld.postservice.domain.post.repository.TagRepository;
 import io.ananworld.postservice.domain.post.repository.custom.PostRepositoryCustom;
 import io.ananworld.postservice.domain.post.service.PostService;
 import io.ananworld.postservice.global.domain.dto.PostDto;
 import io.ananworld.postservice.global.domain.dto.TagDto;
-import io.ananworld.postservice.global.domain.entity.Comment;
 import io.ananworld.postservice.global.domain.entity.Post;
+import io.ananworld.postservice.global.domain.entity.PostLike;
 import io.ananworld.postservice.global.domain.entity.Tag;
 import io.ananworld.postservice.global.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -35,6 +35,8 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final TagRepository tagRepository;
     private final PostRepositoryCustom postRepositoryCustom;
+    private final PostLikeRepository postLikeRepository;
+    private final PostVisitRepository postVisitRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -61,11 +63,26 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDto read(Long postId) throws ApiException {
-        Post post = postRepository.findWithTagsByPostId(postId).orElseThrow(() -> new ApiException("no such post for postId-" + postId));
+    public PostDto read(Long postId, Long userId) throws ApiException {
+        Post post = postRepository.findWithTagsByPostId(postId).orElseThrow(() -> new ApiException("no such post with postId: " + postId));
         PostDto dto = post.toDto();
+
         dto.setTags(tagsToTagDtos(post.getTags()));
+        dto.setPostLikeYn(findPostLikeYn(postId, userId));
         return dto;
+    }
+
+    @Override
+    public void postLike(Long postId, Long userId) throws ApiException {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new ApiException("no sush post with postId: " + postId));
+        PostLike postLike = new PostLike(post, userId);
+        postLikeRepository.save(postLike);
+    }
+
+    @Override
+    public void postLikeCancel(Long postId, Long userId) throws ApiException {
+        List<PostLike> postLikeList = postLikeRepository.findByPostPostIdAndUserId(postId, userId).orElseThrow(() -> new ApiException("findByPostIdAndUserId error"));
+        postLikeRepository.deleteAll(postLikeList);
     }
 
     public Set<Tag> tagDtoSetToEntitySet(Set<TagDto> tagDtos) {
@@ -85,5 +102,12 @@ public class PostServiceImpl implements PostService {
             dtos.add(tag.toDto());
         });
         return dtos;
+    }
+
+    public Boolean findPostLikeYn(Long postId, Long userId) throws ApiException {
+        if(userId == null)
+            return false;
+        List<PostLike> postLikeList = postLikeRepository.findByPostPostIdAndUserId(postId, userId).orElseThrow(() -> new ApiException("findByPostIdAndUserId error"));
+        return !postLikeList.isEmpty();
     }
 }

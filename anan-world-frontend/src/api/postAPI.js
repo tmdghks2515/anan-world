@@ -9,7 +9,7 @@ const list = (data) => {
 }
 
 const read = (data) => {
-    return api.get(`/post/open/read?postId=${data.postId}`, {})
+    return api.get(`/post/open/read?postId=${data.postId}&userId=${data.userId || ''}`, {})
 }
 
 const comments = (data) => {
@@ -20,8 +20,16 @@ const comment = (comment) => {
     return api.post(`/post/comment`, comment)
 }
 
+const postLike = (data) => {
+    return api.post(`/post/postLike`, data)
+}
+
+const postLikeCancel = (data) => {
+    return api.post(`/post/postLikeCancel`, data)
+}
+
 const postAPI = {
-    write, list, read, comment, comments
+    write, list, read, comment, comments, postLike, postLikeCancel
 }
 
 export default postAPI

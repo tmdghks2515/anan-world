@@ -4,23 +4,24 @@ import {useParams} from "react-router-dom";
 import styled from "styled-components";
 import postAPI from "../api/postAPI";
 import Profile from "../components/user/Profile";
-import {Affix, Button, Col, Divider, Row} from "antd";
+import {Affix, Button, Col, Divider, message, Row} from "antd";
 import CommentsBlock from "../components/post/comment/CommentsBlock";
 import {useDispatch, useSelector} from "react-redux";
-import {read, setPost} from "../slices/form/post";
+import {postLike, read, setPost} from "../slices/form/post";
 import _ from "lodash";
-import {HeartOutlined} from "@ant-design/icons";
+import {HeartFilled, HeartOutlined} from "@ant-design/icons";
 
 const Post = (props) => {
     const {username, postId} = useParams()
     const [post, setPost] = useState({})
+    const user = useSelector(state => _.get(state, 'user.value'))
 
     useEffect( () => {
         load()
-    }, [])
+    }, [user])
 
     const load =  async () => {
-        const res = await postAPI.read({postId})
+        const res = await postAPI.read({postId, userId: user.id})
         if (_.isEqual(res.status, 200)) {
             const res2 = await postAPI.comments({postId})
             setPost({...res.data, comments: res2.data})
@@ -39,6 +40,32 @@ const Post = (props) => {
             scrollBottom()
     }
 
+    const postLikeHandler = () => {
+        console.log('user!!', user)
+        if(!post.postLikeYn)
+            postLike()
+        else
+            postLikeCancel()
+    }
+
+    const postLike = async () => {
+        const res = await postAPI.postLike({postId: post.postId, userId: user.id})
+        if (_.isEqual(res.status, 200)) {
+            setPost({...post, postLikeCnt: post.postLikeCnt + 1, postLikeYn: true});
+        } else {
+            console.log(res)
+        }
+    }
+
+    const postLikeCancel = async () => {
+        const res = await postAPI.postLikeCancel({postId: post.postId, userId: user.id})
+        if (_.isEqual(res.status, 200)) {
+            setPost({...post, postLikeCnt: post.postLikeCnt - 1, postLikeYn: false});
+        } else {
+            console.log(res)
+        }
+    }
+
     return (
         <Row>
             <Col span={4}>
@@ -48,14 +75,16 @@ const Post = (props) => {
                     <AffixContainer>
                         <StyledButton
                             size={"large"}
-                            // onClick={() => {
-                            //     this.setState({
-                            //         top: this.state.top + 10,
-                            //     });
-                            // }}
+                            onClick={postLikeHandler}
+                            disabled={!user.signed}
                         >
-                            <HeartOutlined style={{fontSize: 20, color: '#c8c8c8'}}/>
+                            {post.postLikeYn ?
+                                <HeartFilled style={{fontSize: 16}}/> :
+                                <HeartOutlined style={{fontSize: 16}}/>
+                            }
                         </StyledButton>
+                        <br/>
+                        {post.postLikeCnt}
                     </AffixContainer>
                 </StyledAffix>
             </Col>
@@ -86,12 +115,15 @@ const AffixContainer = styled.div`
     margin: 0 auto;
     text-align: center;
     height: 8rem;
-    width: 4rem;
+    width: 3.5rem;
     border-radius: 5rem;
     background-color: #eee;
+    color: gray;
 `
 const StyledButton = styled(Button)`
     height: 3rem;
+    width: 3rem;
     border-radius: 100rem;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
+    text-align: center;
 `

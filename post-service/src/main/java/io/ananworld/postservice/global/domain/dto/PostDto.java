@@ -20,7 +20,10 @@ public class PostDto {
     private Set<TagDto> tags;
     private List<CommentDto> comments;
     private Integer commentsCnt;
+    private Integer postLikeCnt;
+    private Integer postVisitCnt;
     private String createdAt;
     private String modifiedAt;
+    private Boolean postLikeYn;
 
 }

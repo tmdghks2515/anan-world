@@ -29,6 +29,9 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                         post.postTitle,
                         post.postContent,
                         post.writerName,
+                        post.commentsCnt,
+                        post.postLikeCnt,
+                        post.postVisitCnt,
                         post.createdAt.stringValue().substring(0, 19).as("createdAt"),
                         post.modifiedAt.stringValue().substring(0, 19).as("modifiedAt")
                 ))

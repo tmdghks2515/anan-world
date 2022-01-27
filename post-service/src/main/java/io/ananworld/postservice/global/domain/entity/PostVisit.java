@@ -25,4 +25,9 @@ public class PostVisit extends BaseEntity{
 
     @Column(name="user_id")
     private Long userId;
+
+    public PostVisit(Post post, Long userId) {
+        this.post = post;
+        this.userId = userId;
+    }
 }

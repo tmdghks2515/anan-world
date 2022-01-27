@@ -11,6 +11,7 @@ import io.ananworld.postservice.global.domain.dto.PostDto;
 import io.ananworld.postservice.global.domain.dto.TagDto;
 import io.ananworld.postservice.global.domain.entity.Post;
 import io.ananworld.postservice.global.domain.entity.PostLike;
+import io.ananworld.postservice.global.domain.entity.PostVisit;
 import io.ananworld.postservice.global.domain.entity.Tag;
 import io.ananworld.postservice.global.exception.ApiException;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +22,12 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 @Transactional
@@ -69,6 +72,7 @@ public class PostServiceImpl implements PostService {
 
         dto.setTags(tagsToTagDtos(post.getTags()));
         dto.setPostLikeYn(findPostLikeYn(postId, userId));
+        postVisit(postId, userId);
         return dto;
     }
 
@@ -109,5 +113,24 @@ public class PostServiceImpl implements PostService {
             return false;
         List<PostLike> postLikeList = postLikeRepository.findByPostPostIdAndUserId(postId, userId).orElseThrow(() -> new ApiException("findByPostIdAndUserId error"));
         return !postLikeList.isEmpty();
+    }
+
+    private void postVisit(Long postId, Long userId) throws ApiException {
+        PostVisit postVisit = postVisitRepository.findTop1ByPostPostIdAndUserIdOrderByCreatedAtDesc(postId, userId).orElseGet(() -> null);
+        if (postVisit == null) {
+            postVisitCnt(postId, userId);
+        } else {
+            LocalDate today = LocalDate.now();
+            String lastViewDateTime = postVisit.getCreatedAt();
+            LocalDate lastViewDate = LocalDate.parse(lastViewDateTime, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"));
+            if(!today.isEqual(lastViewDate))
+                postVisitCnt(postId, userId);
+        }
+    }
+
+    private void postVisitCnt(Long postId, Long userId) throws ApiException {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new ApiException("post findById error"));
+        PostVisit postVisit = new PostVisit(post, userId);
+        postVisitRepository.save(postVisit);
     }
 }

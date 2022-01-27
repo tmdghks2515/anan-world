@@ -36,13 +36,11 @@ const MyEditor = () => {
         const title = _.get(data, 'target.value')
         if(title)
             dispatch(setTitle(title))
-        console.log('post!!', post)
     }
 
     const tagsOnChangeHandler = (data) => {
         if(data)
             dispatch(setTags(data))
-        console.log('post!!', post)
     }
 
     return (

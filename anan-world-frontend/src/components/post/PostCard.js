@@ -6,7 +6,7 @@ import {useNavigate} from "react-router";
 import Utils from "../../utils/Utils";
 import {Link} from "react-router-dom";
 import moment from "moment";
-import {CommentOutlined, EyeFilled, HeartFilled} from "@ant-design/icons";
+import {CommentOutlined, EyeOutlined, HeartOutlined} from "@ant-design/icons";
 
 const PostCard = (props) => {
     const { post }  = props
@@ -15,18 +15,6 @@ const PostCard = (props) => {
     const handleClick = () => {
         navigate(`/@${post.writerName}/${post.postId}`)
     }
-
-    const actions = [
-        <StyledSpan>
-            <HeartFilled /> {post.postLikeCnt}
-        </StyledSpan>,
-        <StyledSpan>
-            <CommentOutlined/> {post.commentsCnt}
-        </StyledSpan>,
-        <StyledSpan>
-            <EyeFilled/> {post.postVisitCnt}
-        </StyledSpan>
-    ]
 
     return (
         <StyledCard
@@ -45,7 +33,15 @@ const PostCard = (props) => {
                 · {moment(post.createdAt).fromNow()}
             </StyledCardInfo>
             <StyledCardFooter>
-                {actions.map(action => action)}
+                <StyledSpan>
+                    <HeartOutlined /> {post.postLikeCnt}
+                </StyledSpan>
+                <StyledSpan>
+                    <CommentOutlined/> {post.commentsCnt}
+                </StyledSpan>
+                <StyledSpan>
+                    <EyeOutlined/> {post.postVisitCnt}
+                </StyledSpan>
             </StyledCardFooter>
         </StyledCard>
     )

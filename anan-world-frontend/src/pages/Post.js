@@ -28,10 +28,15 @@ const Post = (props) => {
         }
     }
 
-    const scrollBottom = async() => {
+    const scrollBottom = () => {
         if (post.commentsCnt > _.size(post.comments)) {
-            const res = await postAPI.comments({postId, size: _.size(post.comments)+10});
-            setPost({...post, comments: res.data})
+            postAPI.comments({postId, size: _.size(post.comments)+10})
+                .then(res => {
+                    setPost({...post, comments: res.data})
+                })
+                .catch(error => {
+                    console.log(error)
+                })
         }
     }
 
@@ -41,29 +46,30 @@ const Post = (props) => {
     }
 
     const postLikeHandler = () => {
-        console.log('user!!', user)
         if(!post.postLikeYn)
             postLike()
         else
             postLikeCancel()
     }
 
-    const postLike = async () => {
-        const res = await postAPI.postLike({postId: post.postId, userId: user.id})
-        if (_.isEqual(res.status, 200)) {
-            setPost({...post, postLikeCnt: post.postLikeCnt + 1, postLikeYn: true});
-        } else {
-            console.log(res)
-        }
+    const postLike = () => {
+        postAPI.postLike({postId: post.postId, userId: user.id})
+            .then(res => {
+                setPost({...post, postLikeCnt: post.postLikeCnt + 1, postLikeYn: true});
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
-    const postLikeCancel = async () => {
-        const res = await postAPI.postLikeCancel({postId: post.postId, userId: user.id})
-        if (_.isEqual(res.status, 200)) {
-            setPost({...post, postLikeCnt: post.postLikeCnt - 1, postLikeYn: false});
-        } else {
-            console.log(res)
-        }
+    const postLikeCancel = () => {
+        postAPI.postLikeCancel({postId: post.postId, userId: user.id})
+            .then(res => {
+                setPost({...post, postLikeCnt: post.postLikeCnt - 1, postLikeYn: false});
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
     return (

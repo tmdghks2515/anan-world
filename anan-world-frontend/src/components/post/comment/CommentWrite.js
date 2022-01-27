@@ -24,7 +24,6 @@ const CommentWrite = (props) => {
             return
         const res = await postAPI.comment(comment);
         if (_.isEqual(res.status, 200)) {
-            console.log('!!!')
             load()
         }
         setComment(initialComment)
